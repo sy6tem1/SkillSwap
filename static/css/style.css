@@ -1,0 +1,112 @@
+/* 1. Глобальные настройки и переменные */
+:root {
+    --blue-prime: #08f;
+    --gray-accents: #949494;
+    --gray-tabs: #ededed;
+    --maingray: rgba(217, 217, 217, 0.65);
+    --error: #d75038;
+    --white: #fff;
+    --black: #000;
+    
+    /* Константы для размеров (чтобы не запутаться) */
+    --header-height: 60px;
+    --tab-bar-height: 70px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Указываем основной шрифт проекта */
+    font-family: "Inter", "SF Pro", sans-serif;
+}
+
+/* 2. Оболочка проекта */
+body {
+    background-color: #333; /* Тёмный фон снаружи, чтобы "телефон" выделялся */
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 430px; /* Твой размер iPhone из Figma */
+    min-height: 100vh;
+    background-color: var(--white); /* Фон внутри приложения */
+    position: relative;
+    padding-top: var(--header-height);
+    padding-bottom: var(--tab-bar-height);
+    overflow-x: hidden;
+}
+
+/* 3. Твой элемент из Figma (скриншот image_9ab32b.png) */
+.nav-pill {
+    border-radius: 50px;
+    padding: 13px 54px;
+    width: 360px;
+    height: 57px;
+    
+    /* Используем твою переменную maingray */
+    background: var(--maingray); 
+    backdrop-filter: blur(4px);
+    
+    /* Центрируем саму плашку на экране */
+    margin: 20px auto; 
+    
+    /* Выравниваем иконки внутри */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Стили для иконок внутри плашки */
+.nav-pill img {
+    height: 29px;
+    width: auto;
+}
+
+.avatar {
+border-radius: 20px;
+width: 171px;
+height: 138px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрируем карточку на экране "телефона" */
+    padding: 20px;
+}
+
+.avatar-container {
+    position: relative; /* Чтобы надпись "Я красивая" прилипла к фото */
+}
+
+.status-label {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.user-card:active, .nav-pill:active {
+    transform: scale(0.98); /* Карточка чуть сжимается при нажатии */
+    transition: 0.1s;
+}
+
+.skill-tag {
+    display: inline-block;
+    background-color: var(--white);
+    border: 1px solid var(--gray-accents);
+    padding: 5px 12px;
+    border-radius: 15px;
+    margin: 5px 2px;
+    font-size: 14px;
+    color: var(--black);
+}

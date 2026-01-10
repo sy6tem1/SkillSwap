@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="user-card">
+        <div class="avatar-container">
+            <img src="{% static 'assets/img/sasha.png' %}" alt="Саша" class="avatar">
+            <span class="status-label">Я красивая</span>
+        </div>
+        <div class="user-info">
+            <h2>Саша</h2>
+            <p>Играю в футбол</p>
+            <p>Решаю математику</p>
+        </div>
+    </div>
+
+    <div class="nav-pill">
+        <img src="{% static 'assets/icons/home.svg' %}" alt="Home">
+        <img src="{% static 'assets/icons/heart.svg' %}" alt="Like">
+    </div>
+</div>
+{% endblock %}
