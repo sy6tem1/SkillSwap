@@ -4,9 +4,8 @@
 {% block content %}
 <div class="container">
     <div class="user-card">
-        <div class="avatar-container">
-            <img src="{% static 'assets/img/sasha.png' %}" alt="Саша" class="avatar">
-            <span class="status-label">Я красивая</span>
+        <div class="avatar-small">
+            <img src="{% static 'assets/images/123.jpg' %}" alt="Аватарка" class="avatar">
         </div>
         <div class="user-info">
             <h2>Саша</h2>
@@ -16,8 +15,10 @@
     </div>
 
     <div class="nav-pill">
-        <img src="{% static 'assets/icons/home.svg' %}" alt="Home">
-        <img src="{% static 'assets/icons/heart.svg' %}" alt="Like">
+        <img src="{% static 'assets/icons/HomeOn.svg' %}" alt="Home">
+        <img src="{% static 'assets/icons/HeartOff.svg' %}" alt="Likes">
+        <img src="{% static 'assets/icons/MagicOff.svg' %}" alt="Magic">
+        <img src="{% static 'assets/icons/ProfileOff.svg' %}" alt="Profile">
     </div>
 </div>
 {% endblock %}

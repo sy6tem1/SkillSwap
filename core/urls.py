@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from PIL.DcxImagePlugin import MAGIC
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path
@@ -21,7 +22,23 @@ from django.urls import path
 def home(request):
     return render(request, 'index.html')
 
+def profile(request):
+    return render(request, 'profile.html')
+
+def magic(request):
+    return render(request, 'magic.html')
+
+def likes(request):
+    return render(request, 'likes.html')
+
+def reg(request):
+    return render(request, 'registration.html')
+
 urlpatterns = [
     path('admin/', admin.site.register),
-    path('', home), # Главная страница
+    path('', home),  # Главная страница
+    path('profile/', profile),  # Профиль
+    path('magic/', magic),  # Удиви меня
+    path('likes/', likes),  # Лайкнутые
+    path('reg/', reg),  # Регистрация
 ]
