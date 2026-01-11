@@ -40,38 +40,41 @@ body {
     overflow-x: hidden;
 }
 
-.main-content{
-    width: 100%;
-    max-width: 480px;
-
+.main-content {
+    margin: 0 auto;
+    padding: 20px;
 }
 
 
-/* 3. Твой элемент из Figma (скриншот image_9ab32b.png) */
 .nav-pill {
     border-radius: 50px;
     padding: 13px 54px;
     width: 360px;
     height: 57px;
-    
-    /* Используем твою переменную maingray */
-    background: var(--maingray); 
+
+    background: var(--maingray);
     backdrop-filter: blur(4px);
-    
-    /* Центрируем саму плашку на экране */
-    margin: 20px auto; 
-    
-    /* Выравниваем иконки внутри */
+
+    margin: 20px auto;
+
+}
+
+.nav-link {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
 
-/* Стили для иконок внутри плашки */
-.nav-pill img {
     height: 29px;
     width: auto;
 }
+
+.card {
+    width: 171px;
+    height: 215px;
+}
+
+
+
 
 .avatar-small {
 border-radius: 20px;
@@ -102,9 +105,9 @@ height: 138px;
     font-weight: bold;
 }
 
-.user-card:active, .nav-pill:active {
-    transform: scale(0.98); /* Карточка чуть сжимается при нажатии */
-    transition: 0.1s;
+.card:active,
+.nav-link:active {
+    transform: scale(0.98);
 }
 
 .skill-tag {
