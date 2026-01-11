@@ -8,17 +8,12 @@
             <img src="{% static 'assets/images/123.jpg' %}" alt="Аватарка" class="avatar">
         </div>
         <div class="user-info">
-            <h2>Саша</h2>
-            <p>Играю в футбол</p>
-            <p>Решаю математику</p>
-        </div>
-    </div>
+            <h2>{{ user.name }}</h2>
 
-    <div class="nav-pill">
-        <img src="{% static 'assets/icons/HomeOn.svg' %}" alt="Home">
-        <img src="{% static 'assets/icons/HeartOff.svg' %}" alt="Likes">
-        <img src="{% static 'assets/icons/MagicOff.svg' %}" alt="Magic">
-        <img src="{% static 'assets/icons/ProfileOff.svg' %}" alt="Profile">
+            {% for skill in user.skills %}
+                <p>{{ skill }}</p>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

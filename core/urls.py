@@ -14,7 +14,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from PIL.DcxImagePlugin import MAGIC
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path
@@ -35,10 +34,10 @@ def reg(request):
     return render(request, 'registration.html')
 
 urlpatterns = [
-    path('admin/', admin.site.register),
-    path('', home),  # Главная страница
-    path('profile/', profile),  # Профиль
-    path('magic/', magic),  # Удиви меня
-    path('likes/', likes),  # Лайкнутые
-    path('reg/', reg),  # Регистрация
+    path('admin/', admin.site.urls),
+    path('', home, name='home'),
+    path('profile/', profile, name='profile'),
+    path('magic/', magic, name='magic'),
+    path('likes/', likes, name='likes'),
+    path('reg/', reg, name='reg'),
 ]
