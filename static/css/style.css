@@ -18,7 +18,7 @@
     padding: 0;
     box-sizing: border-box;
     /* Указываем основной шрифт проекта */
-    font-family: "Inter", "SF Pro", sans-serif;
+    font-family: "Inter", serif;
 }
 
 /* 2. Оболочка проекта */
@@ -31,7 +31,7 @@ body {
 
 .content-wrapper {
     width: 100%;
-    max-width: 430px; /* Твой размер iPhone из Figma */
+    max-width: 500px; /* Твой размер iPhone из Figma */
     min-height: 100vh;
     background-color: var(--white); /* Фон внутри приложения */
     position: relative;
@@ -39,6 +39,13 @@ body {
     padding-bottom: var(--tab-bar-height);
     overflow-x: hidden;
 }
+
+.main-content{
+    width: 100%;
+    max-width: 480px;
+
+}
+
 
 /* 3. Твой элемент из Figma (скриншот image_9ab32b.png) */
 .nav-pill {
@@ -66,7 +73,7 @@ body {
     width: auto;
 }
 
-.avatar {
+.avatar-small {
 border-radius: 20px;
 width: 171px;
 height: 138px;

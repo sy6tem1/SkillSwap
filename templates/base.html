@@ -1,7 +1,45 @@
-{% load static %} <!DOCTYPE html>
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-    ...
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap</title>
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-...
+<body>
+
+<div class="content-wrapper">
+
+    <header class="app-header">
+        <h1>SkillSwap</h1>
+        <img src="{% static 'assets/icons/Search.svg' %}" alt="Поиск" class="icon">
+    </header>
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <nav class="nav-pill">
+        <a href="/" class="nav-link">
+            <img src="{% static 'assets/icons/HomeOn.svg' %}" alt="Главная">
+        </a>
+        <a href="/likes" class="nav-link">
+            <img src="{% static 'assets/icons/HeartOff.svg' %}" alt="Лайкнутые">
+        </a>
+        <a href="/magic" class="nav-link">
+            <img src="{% static 'assets/icons/MagicOff.svg' %}" alt="Удиви меня">
+        </a>
+        <a href="/profile" class="nav-link">
+            <img src="{% static 'assets/icons/ProfileOff.svg' %}" alt="Профиль">
+        </a>
+    </nav>
+
+</div>
+
+</body>
+</html>
