@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from accounts.models import Profile
 
+
 def home(request):
     query = request.GET.get('q')
 
@@ -25,3 +26,10 @@ def like_profile(request, profile_id):
         profile.liked_by.add(request.user)
 
     return redirect('home')
+
+
+def profile_detail(request, slug):
+    profile = get_object_or_404(Profile, slug=slug)
+    return render(request, 'profile_detail.html', {
+        'profile': profile
+    })

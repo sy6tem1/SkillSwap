@@ -30,7 +30,6 @@
     {% endfor %}
     {% else %}
     <div class="empty-likes">
-        <img src="{% static 'assets/icons/HeartEmptyBig.svg' %}" alt="No likes">
         <p>Пока нет понравившихся профилей</p>
         <a href="{% url 'home' %}" class="btn btn-primary">Найти профиль</a>
     </div>

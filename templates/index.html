@@ -4,7 +4,7 @@
 {% block content %}
 <div class="cards-grid">
     {% for profile in profiles %}
-    <div class="user-card">
+    <a href="{% url 'profile_detail' profile.slug %}" class="user-card">
         <div class="user-card__avatar">
             {% if profile.photo %}
             <img src="{{ profile.photo.url }}" alt="">
@@ -22,7 +22,7 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
+    </a>
     {% endfor %}
 </div>
 
