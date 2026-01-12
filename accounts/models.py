@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 class Skill(models.Model):
@@ -17,19 +18,68 @@ class Skill(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    description = models.TextField(max_length=700)
+    description = models.TextField(
+        max_length=700,
+        blank=True,
+        default='Описание ещё не добавлено'
+    )
 
-    name = models.CharField(max_length=100)
 
-    photo = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    name = models.CharField(
+        max_length=100
 
-    telegram = models.CharField(max_length=100, blank=False)
+    )
 
-    skills = models.ManyToManyField(Skill, related_name='profiles', blank=True)
 
-    liked_by = models.ManyToManyField(User, related_name='liked_profiles', blank=True)
+    photo = models.ImageField(
+        upload_to='avatars/',
+        blank=True,
+        null=True
+    )
 
-    slug = models.SlugField(max_length=100, db_index=True, unique=True)
+
+    telegram = models.CharField(
+        max_length=100,
+        blank=False
+    )
+
+
+    skills = models.ManyToManyField(
+        Skill,
+        related_name='profiles',
+        blank=True
+
+    )
+
+
+    liked_by = models.ManyToManyField(
+        User,
+        related_name='liked_profiles',
+        blank=True
+
+    )
+
+    slug = models.SlugField(
+        max_length=120,
+        unique=True,
+        blank=True
+    )
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+
+            while Profile.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name
