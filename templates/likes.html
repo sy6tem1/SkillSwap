@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+<div class="likes-container">
+
+    {% if liked_profiles %}
+    {% for profile in liked_profiles %}
+    <div class="user-card liked">
+        <div class="user-card__avatar">
+            {% if profile.photo %}
+            <img src="{{ profile.photo.url }}" alt="">
+            {% else %}
+            <img src="{% static 'assets/images/123.jpg' %}" alt="">
+            {% endif %}
+        </div>
+        <div class="user-card__content">
+            <h2 class="user-card__name">{{ profile.name }}</h2>
+            <div class="user-card__skills">
+                {% for skill in profile.skills.all %}
+                <span class="skill-chip">{{ skill.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button class="like-btn liked">
+            <img src="{% static 'assets/icons/HeartOn.svg' %}" alt="Liked">
+        </button>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-likes">
+        <img src="{% static 'assets/icons/HeartEmptyBig.svg' %}" alt="No likes">
+        <p>Пока нет понравившихся профилей</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Найти профиль</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

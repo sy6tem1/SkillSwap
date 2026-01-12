@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import path
 from django.conf import settings
@@ -34,8 +35,12 @@ def profile(request):
 def magic(request):
     return render(request, 'magic.html')
 
+@login_required
 def likes(request):
-    return render(request, 'likes.html')
+    profiles = Profile.objects.filter(liked_by=request.user)
+    return render(request, 'likes.html', {
+        'profiles': profiles
+    })
 
 def reg(request):
     return render(request, 'registration.html')
