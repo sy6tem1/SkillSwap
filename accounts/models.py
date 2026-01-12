@@ -7,7 +7,6 @@ class Skill(models.Model):
         max_length=100,
         unique=True,
         verbose_name='Навык',
-        verbose_name_plural = 'Навыки'
     )
 
     def __str__(self):

@@ -43,7 +43,7 @@ SKILLS = [
 
 
 class Command(BaseCommand):
-    help = "Load initial skills into database"
+    help = "Загрузить навыки в БД"
 
     def handle(self, *args, **kwargs):
         created_count = 0
@@ -55,6 +55,6 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Skills loaded successfully. New skills added: {created_count}"
+                f"Навыки загружены. Добавлено: {created_count}"
             )
         )
