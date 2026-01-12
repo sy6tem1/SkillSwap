@@ -8,8 +8,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.13 (Skil)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.14 (SkillSwap)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Python 3.13 (informatique) interpreter library" level="application" />
   </component>
