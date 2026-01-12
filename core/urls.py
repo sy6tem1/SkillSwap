@@ -17,9 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from accounts.models import Profile
+
+
 
 def home(request):
-    return render(request, 'index.html')
+    print("HOME FROM ACCOUNTS")  # или CORE — как назовёшь
+    profiles = Profile.objects.all()
+    return render(request, 'index.html', {'profiles': profiles})
 
 def profile(request):
     return render(request, 'profile.html')
@@ -41,3 +48,8 @@ urlpatterns = [
     path('likes/', likes, name='likes'),
     path('reg/', reg, name='reg'),
 ]
+
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)

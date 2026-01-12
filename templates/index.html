@@ -2,18 +2,28 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
+<div class="cards-grid">
+    {% for profile in profiles %}
     <div class="user-card">
-        <div class="avatar-small">
-            <img src="{% static 'assets/images/123.jpg' %}" alt="Аватарка" class="avatar">
+        <div class="user-card__avatar">
+            {% if profile.photo %}
+            <img src="{{ profile.photo.url }}" alt="">
+            {% else %}
+            <img src="{% static 'assets/images/123.jpg' %}" alt="">
+            {% endif %}
         </div>
-        <div class="user-info">
-            <h2>{{ user.name }}</h2>
 
-            {% for skill in user.skills %}
-            <span class="skill-tag">{{ skill }}</span>
-            {% endfor %}
+        <div class="user-card__content">
+            <h2 class="user-card__name">{{ profile.name }}</h2>
+
+            <div class="user-card__skills">
+                {% for skill in profile.skills.all %}
+                <span class="skill-chip">{{ skill.name }}</span>
+                {% endfor %}
+            </div>
         </div>
     </div>
+    {% endfor %}
 </div>
+
 {% endblock %}

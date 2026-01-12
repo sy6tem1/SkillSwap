@@ -13,11 +13,24 @@
 <body>
 
 <div class="content-wrapper">
-
     <header class="app-header">
-        <h1>SkillSwap</h1>
-        <img src="{% static 'assets/icons/Search.svg' %}" alt="Поиск" class="icon">
+        <form class="search-form" method="get" action="/">
+            <img
+                    src="{% static 'assets/icons/Search.svg' %}"
+                    alt="Поиск"
+                    class="search-icon"
+            >
+
+            <input
+                    type="text"
+                    name="q"
+                    placeholder="Искать навыки и людей..."
+                    class="search-input"
+                    value="{{ request.GET.q }}"
+            >
+        </form>
     </header>
+
 
     <main class="main-content">
         {% block content %}
