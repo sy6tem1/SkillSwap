@@ -9,7 +9,6 @@ from accounts.models import Profile
 
 
 def home(request):
-    print("HOME FROM ACCOUNTS")  # или CORE — как назовёшь
     profiles = Profile.objects.all()
     return render(request, 'index.html', {'profiles': profiles})
 
