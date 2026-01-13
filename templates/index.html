@@ -12,14 +12,27 @@
             <img src="{% static 'assets/images/123.jpg' %}" alt="">
             {% endif %}
         </div>
+        <div class="user-card-content-container">
+            <div class="likes-container">
+                <div class="like-btn">
+                    <img src="static/assets/icons/HeartOff.svg" alt="">                    
+                </div>
+            </div>
+            <div class="user-card__content">
+                <h2 class="user-card__name">{{ profile.name }}</h2>
 
-        <div class="user-card__content">
-            <h2 class="user-card__name">{{ profile.name }}</h2>
+                <div class="user-card__skills">
+                    {% with skills=profile.skills.all %}
+                    {% for skill in skills|slice:":2" %}
+                    <span class="skill-chip">{{ skill.name }}</span>
+                    {% endfor %}
 
-            <div class="user-card__skills">
-                {% for skill in profile.skills.all %}
-                <span class="skill-chip">{{ skill.name }}</span>
-                {% endfor %}
+                    {% if skills|length > 2 %}
+                    <span class="skill-chip">+ ещё</span>
+                    {% endif %}
+                    {% endwith %}
+
+                </div>
             </div>
         </div>
     </a>

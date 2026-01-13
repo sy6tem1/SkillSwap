@@ -123,6 +123,9 @@ body {
     height: auto;
 }
 
+
+
+
 /* ---------------------------------------- */
 /* MAIN CONTENT AREA */
 /* ---------------------------------------- */
@@ -153,7 +156,7 @@ body {
 .user-card {
     width: 100%;
     height: 215px;
-    background: var(--gray-light);
+    background: transparent;
     border-radius: 20px;
 
     text-decoration: none;
@@ -162,13 +165,22 @@ body {
     display: flex;
     flex-direction: column;
 
-    padding: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
+
+.user-card-content-container{
+    width: 100%;
+    background: var(--gray-light);
+    margin-top: 5px;
+    padding: 11px;
+
+    border-radius: 20px ;
+}
+
+
 .user-card__avatar {
     width: 100%;
     height: 138px;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
 }
 
@@ -181,17 +193,13 @@ body {
 
 
 .user-card__content {
-    margin-top: 8px;
+    width: 100%;
+    background: var(--gray-light);
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-user-card__like img {
-
-
-
-}
 
 .user-card__name {
     font-size: 16px;
@@ -209,8 +217,7 @@ user-card__like img {
     padding: 4px 10px;
     border-radius: 14px;
 
-    font-size: 12px;
-    border: 1px solid #949494;
+    font-size: 11px;
     background: #fff;
     color: #000;
 }
@@ -288,8 +295,8 @@ user-card__like img {
 }
 
 .like-btn img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 /* Пустой стейт */
@@ -318,3 +325,74 @@ user-card__like img {
     font-size: 14px;
 }
 
+
+/* ---------------------------------------- */
+/* REGISTRATION */
+/* ---------------------------------------- */
+
+
+.focus-phrase{
+    display: flex;
+    font-size: 24px;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 45px;
+}
+
+.reg-field-form-container{
+    position: relative;
+    top: 20px;
+    width: 85%;
+    height: 40px;
+    max-height: 45px;
+    display: flex;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 45px;
+}
+
+.reg-field-form{
+    position: relative;
+    top: 60px;
+    width: 100%;
+
+}
+
+.reg-field-input{
+    font-size: 18px;
+    font-weight: 600;
+
+    width: 85%;
+    height: 45px;
+    display: flex;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 45px;
+
+    border: transparent;
+    background: var(--gray-light);
+    border-radius: 50px;
+    text-align: center;
+}
+
+
+
+.reg-field-input::placeholder{
+    font-size: 18px;
+    color: black;
+
+}
+
+
+
+.btn-next{
+    border-radius: 50px;
+    padding: 15px 27px;
+    width: 125px;
+    height: 46px;
+    background: var(--blue-prime);
+
+}
