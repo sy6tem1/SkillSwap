@@ -342,21 +342,25 @@ body {
 
 .reg-field-form-container{
     position: relative;
-    top: 20px;
+    top: 80px;
+
     width: 85%;
     height: 40px;
     max-height: 45px;
-    display: flex;
+
     color: white;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 45px auto 0;
 }
 
 .reg-field-form{
     position: relative;
-    top: 60px;
     width: 100%;
+    align-items: center;
 
 }
 
@@ -364,13 +368,13 @@ body {
     font-size: 18px;
     font-weight: 600;
 
-    width: 85%;
-    height: 45px;
-    display: flex;
+    width: 100%;
+    max-width: 320px;
+    height: 40px;
 
-    margin-left: auto;
     margin-right: auto;
-    margin-top: 45px;
+    margin-left: auto;
+
 
     border: transparent;
     background: var(--gray-light);
@@ -382,17 +386,50 @@ body {
 
 .reg-field-input::placeholder{
     font-size: 18px;
-    color: black;
+    color: var(--gray-text);
 
 }
 
 
+.btn-next-container {
 
-.btn-next{
-    border-radius: 50px;
-    padding: 15px 27px;
     width: 125px;
     height: 46px;
-    background: var(--blue-prime);
 
+    position: absolute;
+
+    right: 50px;
+    bottom: 70px;
+
+}
+
+.btn-next {
+    border-radius: 50px;
+    padding: 15px 27px;
+    text-align: center;
+
+    width: 125px;
+    height: 46px;
+
+    background: var(--blue-prime);
+    border: transparent;
+
+}
+
+.btn-next-text{
+
+    font-size: 18px;
+    color: white;
+    background: transparent;
+    border: transparent;
+
+}
+
+
+.reg-step {
+    display: none;
+}
+
+.reg-step.active {
+    display: block;
 }

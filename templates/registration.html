@@ -2,25 +2,100 @@
 {% load static %}
 
 {% block content %}
+
+
 <div class="app-header">
     <h2 class="focus-phrase">Привет!</h2>
 </div>
 
-<div class="reg-field-form-container">
-    <form class="reg-field-form" method="get" >
-            <input
 
-            type="text"
-            placeholder= "Введи своё имя"
-            class="reg-field-input"
+
+
+<div class="reg-steps">
+
+    <div class="reg-step active" data-step="1">
+        <div class="reg-field-form-container">
+            <form class="reg-field-form" method="post"  >
+                 <input
+                    id="nameInput"
+                    name="get-name"
+                    type="text"
+                    placeholder= "Введи своё имя"
+                    class="reg-field-input"
+                    required
             >
+                <p>
+                    id='nameError'
+                    class = 'error-text'
+                </p>
 
-    </form>
+            </form>
+
+        </div>
+    </div>
+
 </div>
 
-<div class="like-btn">
 
+
+<script>
+    const badWords = ['дурак', 'идиот', 'лох']; // потом вынесем в файл
+
+    function validateName() {
+        const input = document.getElementById('nameInput');
+        const error = document.getElementById('nameError');
+        const value = input.value.toLowerCase();
+
+        if (value.length < 2) {
+            error.textContent = 'Имя слишком короткое';
+            return false;
+        }
+
+        for (let word of badWords) {
+            if (value.includes(word)) {
+                error.textContent = 'Недопустимое имя';
+                return false;
+            }
+        }
+
+        error.textContent = '';
+        return true;
+    }
+</script>
+
+
+
+
+
+
+<div class="btn-next-container">
+    <div class="btn-next">
+        <button onclick="if (validateName()) nextStep()" class="btn-next-text">
+            Далее
+        </button>
+    </div>
 </div>
+
+
+
+<script>
+    let currentStep = 1;
+
+    function nextStep() {
+        const current = document.querySelector(`.reg-step[data-step="${currentStep}"]`);
+        const next = document.querySelector(`.reg-step[data-step="${currentStep + 1}"]`);
+
+        if (!next) return;
+
+        current.classList.remove('active');
+        next.classList.add('active');
+
+        currentStep++;
+    }
+</script>
+
+
+
 
 
 {% endblock %}
