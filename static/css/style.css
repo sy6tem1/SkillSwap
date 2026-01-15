@@ -27,21 +27,29 @@
 /* PHONE WRAPPER */
 /* ---------------------------------------- */
 
+
 body {
     background-color: #333;
     display: flex;
+
     justify-content: center;
-    min-height: 100vh;
+
+    height: 100vh;
+    overflow: hidden;
+
 }
 
 .content-wrapper {
     width: 100%;
     max-width: var(--screen-width);
-    min-height: 100vh;
+    height: 100vh;
+
     background: var(--white);
     position: relative;
-    padding-top: var(--header-height);
-    padding-bottom: var(--nav-height); /* space for bottom nav */
+
+    display: flex;
+    flex-direction: column;
+
 }
 
 /* ---------------------------------------- */
@@ -132,7 +140,34 @@ body {
 
 .main-content {
     padding: 16px;
+    overflow-y: auto;
+
+    position: absolute;
+    top: var(--header-height);
+    bottom: calc(var(--nav-height) + 55px);
 }
+
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+
+    /* iOS / Android */
+    -webkit-overflow-scrolling: touch;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* IE / Edge */
+    -ms-overflow-style: none;
+}
+
+/* Chrome / Safari */
+.main-content::-webkit-scrollbar {
+    display: none;
+}
+
+
 
 .container {
     display: flex;
@@ -142,9 +177,6 @@ body {
 
 /* ---------------------------------------- */
 /* USER CARD */
-/* ---------------------------------------- */
-/* ---------------------------------------- */
-/* USER CARD (FIGMA MATCH) */
 /* ---------------------------------------- */
 
 .cards-grid {
@@ -240,24 +272,36 @@ body {
 .nav-pill {
     border-radius: 50px;
     padding: 13px 54px;
+
     position: fixed;
     bottom: 55px;
     left: 50%;
+
     transform: translateX(-50%);
     width: 90%;
     max-width: var(--screen-width);
     height: var(--nav-height);
+
     background: var(--gray-border);
     backdrop-filter: blur(4px);
+
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 10;
 }
 
-.nav-link img {
+.nav-item svg {
+    width: 26px;
+    height: 26px;
+    display: block;
+}
+
+.nav-item svg path {
     width: 26px;
     height: auto;
+    fill: var(--gray-text);
+    transition: fill 0.2s ease;
 }
 
 /* ---------------------------------------- */
@@ -268,6 +312,13 @@ body {
 .nav-link:active {
     transform: scale(0.98);
     transition: transform 0.2s;
+}
+
+
+
+
+.nav-item.active svg path {
+    fill: var(--blue-prime);
 }
 
 
@@ -342,7 +393,6 @@ body {
 
 .reg-field-form-container{
     position: relative;
-    top: 80px;
 
     width: 85%;
     height: 40px;
@@ -374,12 +424,13 @@ body {
 
     margin-right: auto;
     margin-left: auto;
+    text-align: center;
+
 
 
     border: transparent;
     background: var(--gray-light);
     border-radius: 50px;
-    text-align: center;
 }
 
 
@@ -414,7 +465,16 @@ body {
     background: var(--blue-prime);
     border: transparent;
 
+    transition: 150ms ease-in-out;
 }
+
+
+.btn-next:active{
+
+    transform: scale(0.95);
+
+}
+
 
 .btn-next-text{
 
@@ -426,10 +486,110 @@ body {
 }
 
 
+.reg-steps {
+    position: relative;
+    height: 100%;
+    display: flex;
+    bottom: 100px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
 .reg-step {
     display: none;
+    width: 100%;
+    justify-content: center;
+
+
 }
 
 .reg-step.active {
-    display: block;
+    display: flex;
+
 }
+
+
+
+.avatar-upload{
+
+    border-radius: 20px;
+    width: 264px;
+    height: 245px;
+
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.avatar-placeholder{
+    width: 264px;
+    height: 245px;
+
+    font-size: 16px;
+    font-weight: 650;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+
+
+
+}
+
+.avatar-placeholder img{
+    width: 264px;
+    height: 210px;
+
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+}
+
+.skills-step {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.skills-dropdown {
+    list-style: none;
+    background: #fff;
+    border-radius: 16px;
+    margin-top: 8px;
+    padding: 6px;
+    display: none;
+}
+
+.skills-dropdown li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.skills-dropdown li:hover {
+    background: #ededed;
+}
+
+.selected-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.skill-chip {
+    background: #ededed;
+    padding: 6px 12px;
+    border-radius: 14px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+

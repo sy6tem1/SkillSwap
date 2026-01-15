@@ -63,7 +63,7 @@ SKILLS = [
     "Квадробинг",
     "Видеоигры",
     "Блогинг",
-    "Растеневодство",
+    "Растениеводство",
     "Шитье",
     "Рукоделие",
     "Чтение",
@@ -72,7 +72,7 @@ SKILLS = [
     "Гитара",
     "Фортепиано",
     "Скрипка",
-    "Ударные инстркменты",
+    "Ударные инструменты",
     "Духовые инструменты",
 ]
 
@@ -84,7 +84,7 @@ class Command(BaseCommand):
         created_count = 0
 
         for skill_name in SKILLS:
-            _, created = Skill.objects.get_or_create(name=skill_name)
+            _, created = Skill.objects.get_or_create(name=skill_name.strip())
             if created:
                 created_count += 1
 

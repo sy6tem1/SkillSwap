@@ -3,6 +3,7 @@
 
 {% block content %}
 
+{% csrf_token %}
 
 <div class="app-header">
     <h2 class="focus-phrase">Привет!</h2>
@@ -10,12 +11,12 @@
 
 
 
-
 <div class="reg-steps">
+
+
 
     <div class="reg-step active" data-step="1">
         <div class="reg-field-form-container">
-            <form class="reg-field-form" method="post"  >
                  <input
                     id="nameInput"
                     name="get-name"
@@ -24,77 +25,330 @@
                     class="reg-field-input"
                     required
             >
-                <p>
-                    id='nameError'
-                    class = 'error-text'
-                </p>
 
-            </form>
+                <p id='nameError' class = 'error-text'> Такое сюда вводить нельзя</p>
+
 
         </div>
     </div>
+
+
+
+
+    <div class="reg-step" data-step="2">
+        <div class="avatar-upload">
+
+            <label for="photoInput" class="avatar-placeholder">
+                <img id="photoPreview" src="{% static 'assets/images/123.jpg' %}" alt="avatar">
+                <span>Добавить фото</span>
+            </label>
+
+            <input
+                    type="file"
+                    id="photoInput"
+                    accept="image/*"
+                    hidden
+            >
+
+        </div>
+    </div>
+
+
+
+
+    <div class="reg-step" data-step="3">
+        <div class="skills-step">
+
+            <input
+                    type="text"
+                    id="skillInput"
+                    placeholder="Начни вводить навык"
+                    class="reg-field-input"
+                    autocomplete="off"
+            >
+
+            <ul id="skillsDropdown" class="skills-dropdown"></ul>
+
+            <div id="selectedSkills" class="selected-skills"></div>
+
+        </div>
+    </div>
+
+
+
+    <div class="reg-step" data-step="4">
+        <div class="reg-field-form-container">
+            <input
+                    id="telegramInput"
+                    type="text"
+                    placeholder="@telegram или ссылка"
+                    class="reg-field-input"
+            >
+            <p id="telegramError" class="error-text"></p>
+        </div>
+    </div>
+
+
 
 </div>
 
 
 
-<script>
-    const badWords = ['дурак', 'идиот', 'лох']; // потом вынесем в файл
-
-    function validateName() {
-        const input = document.getElementById('nameInput');
-        const error = document.getElementById('nameError');
-        const value = input.value.toLowerCase();
-
-        if (value.length < 2) {
-            error.textContent = 'Имя слишком короткое';
-            return false;
-        }
-
-        for (let word of badWords) {
-            if (value.includes(word)) {
-                error.textContent = 'Недопустимое имя';
-                return false;
-            }
-        }
-
-        error.textContent = '';
-        return true;
-    }
-</script>
-
-
-
-
-
-
-<div class="btn-next-container">
+<div class="btn-next-container" onclick="nextStep()">
     <div class="btn-next">
-        <button onclick="if (validateName()) nextStep()" class="btn-next-text">
-            Далее
+        <button type="button" class="btn-next-text">
+        Дальше
         </button>
     </div>
 </div>
 
 
 
-<script>
+
+
+
+<script> //Изменение фотки на загруженную
+    document.getElementById('photoInput').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            document.getElementById('photoPreview').src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
+
+
+
+<script> // Переключение шагов
     let currentStep = 1;
 
     function nextStep() {
-        const current = document.querySelector(`.reg-step[data-step="${currentStep}"]`);
-        const next = document.querySelector(`.reg-step[data-step="${currentStep + 1}"]`);
+        if (currentStep === 1 && !validateName()) return;
+        if (currentStep === 3 && selectedSkills.length === 0) {
+            alert("Выбери хотя бы один навык");
+            return;
+        }
+        if (currentStep === 4 && !validateTelegram()) return;
 
-        if (!next) return;
+        const current = document.querySelector(
+            `.reg-step[data-step="${currentStep}"]`
+        );
 
-        current.classList.remove('active');
-        next.classList.add('active');
+        const next = document.querySelector(
+            `.reg-step[data-step="${currentStep + 1}"]`
+        );
 
+        if (!next) {
+            submitRegistration();
+            return;
+        }
+
+        current.classList.remove("active");
+        next.classList.add("active");
         currentStep++;
     }
 </script>
 
 
+
+<script> //Фильтр плохих слов
+const badWords = ['дурак', 'идиот', 'лох']; // вынести в файл
+
+function validateName() {
+    const input = document.getElementById('nameInput');
+    const error = document.getElementById('nameError');
+    const value = input.value.toLowerCase();
+
+    if (value.length < 2) {
+        error.textContent = 'Имя слишком короткое';
+        return false;
+    }
+
+    for (let word of badWords) {
+        if (value.includes(word)) {
+            error.textContent = 'Недопустимое имя';
+            return false;
+        }
+    }
+
+    error.textContent = '';
+    return true;
+}
+</script>
+
+
+
+<script> //Список добавленных скилов
+    const skillInput = document.getElementById("skillInput");
+    const dropdown = document.getElementById("skillsDropdown");
+    const selectedContainer = document.getElementById("selectedSkills");
+
+    let selectedSkills = [];
+
+    skillInput.addEventListener("input", async () => {
+        const value = skillInput.value.trim();
+        if (!value) {
+            dropdown.style.display = "none";
+            return;
+        }
+
+        const res = await fetch(`/api/skills/?q=${value}`);
+        const skills = await res.json();
+
+        dropdown.innerHTML = "";
+
+        skills.forEach(skill => {
+            if (selectedSkills.includes(skill.id)) return;
+
+            const li = document.createElement("li");
+            li.textContent = skill.name;
+
+            li.onclick = () => addSkill(skill);
+            dropdown.appendChild(li);
+        });
+
+        dropdown.style.display = skills.length ? "block" : "none";
+    });
+
+    function addSkill(skill) {
+        selectedSkills.push(skill.id);
+
+        const chip = document.createElement("div");
+        chip.className = "skill-chip";
+        chip.textContent = skill.name;
+
+        chip.onclick = () => {
+            selectedSkills = selectedSkills.filter(id => id !== skill.id);
+            chip.remove();
+        };
+
+        selectedContainer.appendChild(chip);
+        dropdown.style.display = "none";
+        skillInput.value = "";
+    }
+</script>
+
+
+
+
+
+<script> //Телега
+    function validateTelegram() {
+        const input = document.getElementById("telegramInput");
+        const error = document.getElementById("telegramError");
+        const value = input.value.trim();
+
+        if (!value) {
+            error.textContent = "Укажи Telegram";
+            return false;
+        }
+
+        if (
+            !value.startsWith("@") &&
+            !value.startsWith("https://t.me/")
+        ) {
+            error.textContent = "Неверный формат Telegram";
+            return false;
+        }
+
+        error.textContent = "";
+        return true;
+    }
+</script>
+
+
+
+<script> //Сбор данных и регистрация
+    function submitRegistration() {
+        const formData = new FormData();
+
+        formData.append("name", document.getElementById("nameInput").value);
+        formData.append("telegram", document.getElementById("telegramInput").value);
+        formData.append("skills", JSON.stringify(selectedSkills));
+
+        const photo = document.getElementById("photoInput").files[0];
+        if (photo) {
+            formData.append("photo", photo);
+        }
+
+        fetch("{% url 'register' %}", {
+            method: "POST",
+            body: formData,
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/";
+                } else {
+                    alert("Ошибка сохранения");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Ошибка сервера");
+            });
+    }
+
+</script>
+
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(
+                        cookie.substring(name.length + 1)
+                    );
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+
+
+
+
+<script>
+    function submitRegistration() {
+        const csrftoken = getCookie('csrftoken');
+        const formData = new FormData();
+
+        formData.append("name", document.getElementById("nameInput").value);
+        formData.append("telegram", document.getElementById("telegramInput").value);
+        formData.append("skills", JSON.stringify(selectedSkills));
+
+        const photo = document.getElementById("photoInput").files[0];
+        if (photo) {
+            formData.append("photo", photo);
+        }
+
+        fetch("{% url 'register' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrftoken
+            },
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/";
+                } else {
+                    alert("Ошибка");
+                }
+            });
+    }
+</script>
 
 
 

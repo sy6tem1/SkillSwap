@@ -13,11 +13,11 @@
             {% endif %}
         </div>
         <div class="user-card-content-container">
-            <div class="likes-container">
-                <div class="like-btn">
-                    <img src="static/assets/icons/HeartOff.svg" alt="">                    
-                </div>
-            </div>
+
+            <button class="like-btn" type="button">
+                <img src="{% static 'assets/icons/HeartOff.svg' %}" alt="">
+            </button>
+
             <div class="user-card__content">
                 <h2 class="user-card__name">{{ profile.name }}</h2>
 

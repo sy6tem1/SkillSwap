@@ -36,20 +36,35 @@
         {% endblock %}
     </main>
 
+    {% with request.resolver_match.url_name as current %}
+
     <nav class="nav-pill">
-        <a href="/" class="nav-link">
-            <img src="{% static 'assets/icons/HomeOn.svg' %}" alt="Главная">
+
+        <a href="{% url 'home' %}"
+           class="nav-item {% if current == 'home' %}active{% endif %}">
+            {% include 'icons/HomeOn.svg' %}
         </a>
-        <a href="/likes" class="nav-link">
-            <img src="{% static 'assets/icons/HeartOff.svg' %}" alt="Лайкнутые">
+
+        <a href="{% url 'likes' %}"
+           class="nav-item {% if current == 'likes' %}active{% endif %}">
+            {% include 'icons/HeartOn.svg' %}
         </a>
-        <a href="/magic" class="nav-link">
-            <img src="{% static 'assets/icons/MagicOff.svg' %}" alt="Удиви меня">
+
+
+        <a href="{% url 'magic' %}"
+           class="nav-item {% if current == 'magic' %}active{% endif %}">
+            {% include 'icons/MagicOn.svg' %}
         </a>
-        <a href="/profile" class="nav-link">
-            <img src="{% static 'assets/icons/ProfileOff.svg' %}" alt="Профиль">
+
+
+        <a href="{% url 'profile' %}"
+           class="nav-item {% if current == 'profile' %}active{% endif %}">
+            {% include 'icons/ProfileOn.svg' %}
         </a>
+
     </nav>
+
+    {% endwith %}
 
 </div>
 
