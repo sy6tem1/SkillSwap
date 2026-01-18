@@ -1,0 +1,56 @@
+{% extends 'base-no-nav.html' %}
+{% load static %}
+
+{% csrf_token %}
+
+
+{% block content %}
+
+
+
+{% if user.is_authenticated %}
+Привет, {{ user.profile.name }}
+{% else %}
+Войти
+{% endif %}
+
+<form id="loginForm">
+    {% csrf_token %}
+
+    <input name="username" placeholder="Логин">
+    <input name="password" type="password" placeholder="Пароль">
+
+    <button type="submit">Войти</button>
+</form>
+
+
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("/accounts/login/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": document.querySelector(
+                    '[name=csrfmiddlewaretoken]'
+                ).value
+            },
+            body: formData
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/";
+                } else {
+                    alert(data.error);
+                }
+            });
+    });
+</script>
+
+
+
+{% endblock %}

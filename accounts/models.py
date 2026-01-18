@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from unidecode import unidecode
+from django.conf import settings
+
 
 
 class Skill(models.Model):
@@ -17,7 +19,7 @@ class Skill(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
     description = models.TextField(
         max_length=700,
@@ -53,13 +55,6 @@ class Profile(models.Model):
     )
 
 
-    liked_by = models.ManyToManyField(
-        User,
-        related_name='liked_profiles',
-        blank=True
-
-    )
-
     slug = models.SlugField(
         max_length=120,
         unique=True,
@@ -92,6 +87,23 @@ class Profile(models.Model):
 
 
 
+
+class Like(models.Model):
+    from_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='given_likes'
+    )
+    to_profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='received_likes'
+    )
+
+    class Meta:
+        unique_together = ('from_user', 'to_profile')
+
+
     def __str__(self):
-        return self.name
+        return f'{self.from_user} -> {self.to_profile}'
 
