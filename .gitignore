@@ -1,0 +1,12 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/httpRequests/
+.idea/
+.DS_Store
+Thumbs.db
+.vscode/
+*.code-workspace
+__pycache__/
+*.py[cod]
+*$py.class
