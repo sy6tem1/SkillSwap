@@ -125,3 +125,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://176d53bcdf7f.ngrok-free.app',
+    'https://c240d73394ac.ngrok-free.app',
+]
+

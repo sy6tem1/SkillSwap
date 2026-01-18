@@ -27,6 +27,13 @@
             
             <p class="profile-bio-detailed">{{ profile.description }}</p>
 
+
+            <form method="post" action="{% url 'like_profile' profile.id %}">
+                {% csrf_token %}
+                <button type="submit">Добавить в понравившиеся</button>
+            </form>
+
+
             
 
 

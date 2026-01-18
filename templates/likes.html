@@ -1,40 +1,55 @@
-{% extends 'base.html' %}
+{% extends "base-no-nav.html" %}
 {% load static %}
 
 {% block content %}
 
-<div class="likes-container">
+<div class="app-header">
+    <h2 class="focus-phrase">Лайкнутые</h2>
+</div>
 
-    {% if liked_profiles %}
-    {% for profile in liked_profiles %}
-    <div class="user-card liked">
-        <div class="user-card__avatar">
-            {% if profile.photo %}
-            <img src="{{ profile.photo.url }}" alt="">
-            {% else %}
-            <img src="{% static 'assets/images/123.jpg' %}" alt="">
-            {% endif %}
-        </div>
-        <div class="user-card__content">
-            <h2 class="user-card__name">{{ profile.name }}</h2>
-            <div class="user-card__skills">
-                {% for skill in profile.skills.all %}
-                <span class="skill-chip">{{ skill.name }}</span>
-                {% endfor %}
-            </div>
-        </div>
+<div class="main-content">
 
-        <button class="like-btn liked">
-            <img src="{% static 'assets/icons/HeartOn.svg' %}" alt="Liked">
-        </button>
+    {% if profiles %}
+    <div class="cards-grid">
+        {% for profile in profiles %}
+        <div class="user-card">
+
+            <a href="{% url 'profile_detail' profile.slug %}" class="user-card-link">
+                <div class="user-card__avatar">
+                    {% if profile.photo %}
+                        <img src="{{ profile.photo.url }}">
+                    {% else %}
+                        <img src="{% static 'assets/images/123.jpg' %}">
+                    {% endif %}
+                </div>
+
+                <div class="user-card-content-container">
+                    <h2 class="user-card__name">{{ profile.name }}</h2>
+
+                    <div class="user-card__skills">
+                        {% for skill in profile.skills.all|slice:":3" %}
+                            <span class="skill-chip">{{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </a>
+
+            <!-- убрать лайк -->
+            <form method="post" action="{% url 'like_profile' profile.id %}">
+                {% csrf_token %}
+                <button class="like-btn active">
+                    <img src="{% static 'assets/icons/HeartOn.svg' %}">
+                </button>
+            </form>
+
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
     {% else %}
-    <div class="empty-likes">
-        <p>Пока нет понравившихся людей(((</p>
-        <a href="{% url 'home' %}" class="btn btn-primary">Найти подходящих</a>
-    </div>
+        <p class="empty-text">Вы пока никого не лайкнули</p>
     {% endif %}
 
 </div>
+
 {% endblock %}

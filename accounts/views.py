@@ -1,6 +1,7 @@
+import uuid
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from .models import Profile, Skill
+from .models import Profile, Skill, Like
 import json
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
@@ -11,10 +12,40 @@ from django.contrib.auth import login
 
 
 
+@require_POST
 @login_required
-def likes(request):
-    profiles = request.user.profile.likes.all()
-    return render(request, "likes.html", {"profiles": profiles})
+def toggle_like(request):
+    profile_id = request.POST.get("profile_id")
+
+    if not profile_id:
+        return JsonResponse({"error": "No profile id"}, status=400)
+
+    profile = get_object_or_404(Profile, id=profile_id)
+
+    like, created = Like.objects.get_or_create(
+        from_user=request.user,
+        to_profile=profile
+    )
+
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    return JsonResponse({
+        "liked": liked,
+    })
+
+
+
+
+
+@login_required
+def likes_list(request):
+    likes = Like.objects.filter(from_user=request.user)
+    return render(request, 'likes.html', {'likes': likes})
+
 
 
 
@@ -29,54 +60,32 @@ def skills_list(request):
 
 
 
+
 @login_required
-def toggle_like(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "Invalid method"}, status=405)
-
-    profile_id = request.POST.get("profile_id")
-    target = get_object_or_404(Profile, id=profile_id)
-    me = request.user.profile
-
-    if target in me.likes.all():
-        me.likes.remove(target)
-        liked = False
-    else:
-        me.likes.add(target)
-        liked = True
-
-    return JsonResponse({
-        "liked": liked,
-        "likes_count": target.liked_by.count()
-    })
-
-
-
-
-def home(request):
-    query = request.GET.get('q')
-
-    profiles = Profile.objects.all()
-
-    if query:
-        profiles = profiles.filter(
-            skills__name__icontains=query
-        ).distinct()
-
-    return render(request, 'index.html', {
-        'profiles': profiles
-    })
-
-
 def like_profile(request, profile_id):
+    if request.method != 'POST':
+        return redirect('/')
+
     profile = get_object_or_404(Profile, id=profile_id)
 
-    if request.user in profile.liked_by.all():
-        profile.liked_by.remove(request.user)
-    else:
-        profile.liked_by.add(request.user)
+    if profile.user == request.user:
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
-    return redirect('home')
+    like = Like.objects.filter(
+        from_user=request.user,
+        to_profile=profile
+    )
+
+    if like.exists():
+        like.delete()
+    else:
+        Like.objects.create(
+            from_user=request.user,
+            to_profile=profile
+        )
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 
 def profile_detail(request, slug):
@@ -107,22 +116,32 @@ def reg(request):
 
 
 
+@require_POST
 def register_profile(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "POST only"}, status=400)
-
-    name = request.POST.get("name")
-    telegram = request.POST.get("telegram")
+    name = request.POST.get("name", "").strip()
+    telegram = request.POST.get("telegram", "").strip()
     skills_raw = request.POST.get("skills")
     photo = request.FILES.get("photo")
 
     if not name or not telegram:
-        return JsonResponse({"error": "Missing fields"}, status=400)
+        return JsonResponse({
+            "success": False,
+            "error": "Заполните все поля"
+        }, status=400)
 
-    skills_ids = json.loads(skills_raw) if skills_raw else []
+    # 🔐 уникальный username
+    base_username = name.lower().replace(" ", "_")
+    username = base_username
+    counter = 1
 
-    # создаём временного пользователя (без регистрации)
-    user = User.objects.create(username=f"user_{User.objects.count() + 1}")
+    while User.objects.filter(username=username).exists():
+        counter += 1
+        username = f"{base_username}{counter}"
+
+    user = User.objects.create_user(
+        username=username,
+        password=User.objects.make_random_password()
+    )
 
     profile = Profile.objects.create(
         user=user,
@@ -131,12 +150,19 @@ def register_profile(request):
         photo=photo
     )
 
-    if skills_ids:
-        profile.skills.set(
-            Skill.objects.filter(id__in=skills_ids)
-        )
+    if skills_raw:
+        try:
+            skills_ids = json.loads(skills_raw)
+            profile.skills.set(
+                Skill.objects.filter(id__in=skills_ids)
+            )
+        except json.JSONDecodeError:
+            pass
+
+    login(request, user)
 
     return JsonResponse({"success": True})
+
 
 
 
