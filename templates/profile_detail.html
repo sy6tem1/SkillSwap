@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<DOCTYPE html>
+{% extends "base-no-nav.html" %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+
+<div class = 'app-header'>
+            <h2 class = 'focus-phrase'>{% if profile.name %}{{ profile.name }}{% else %}Профиль{% endif %}</h2>
+
+        </div>
+
+
+<div class="content-wrapper">
+    <div class="main-content">
+
+
+        <div class="profile-detail-container">
+
+            <div class="profile-avatar-detailed">
+                <img class="profile-avatar-detailed" src="{{ profile.avatar.url }}" alt="Аватар пользователя">
+            </div>
+
+            <div class="profile-skills-detailed-container">
+                <h2 class="profile-skills-detailed">{{ profile.skills }}</h2>
+            </div>
+
+            
+            <p class="profile-bio-detailed">{{ profile.description }}</p>
+
+            
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
