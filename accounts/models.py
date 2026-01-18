@@ -53,11 +53,11 @@ class Profile(models.Model):
     )
 
 
-    liked_by = models.ManyToManyField(
-        User,
-        related_name='liked_profiles',
+    likes = models.ManyToManyField(
+        "self",
+        symmetrical=False,
+        related_name="liked_by",
         blank=True
-
     )
 
     slug = models.SlugField(

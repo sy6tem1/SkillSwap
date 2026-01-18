@@ -1,42 +1,94 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% csrf_token %}
+
 {% block content %}
 <div class="cards-grid">
-    {% for profile in profiles %}
-    <a href="{% url 'profile_detail' profile.slug %}" class="user-card">
+{% for profile in profiles %}
+
+<div class="user-card">
+
+    <a href="{% url 'profile_detail' profile.slug %}" class="user-card-link">
         <div class="user-card__avatar">
-            {% if profile.photo %}
-            <img src="{{ profile.photo.url }}" alt="">
-            {% else %}
-            <img src="{% static 'assets/images/123.jpg' %}" alt="">
-            {% endif %}
+            <img src="{{ profile.photo.url|default:'static/assets/images/123.jpg' }}">
         </div>
+
         <div class="user-card-content-container">
+            <h2 class="user-card__name">{{ profile.name }}</h2>
 
-            <button class="like-btn" type="button">
-                <img src="{% static 'assets/icons/HeartOff.svg' %}" alt="">
-            </button>
-
-            <div class="user-card__content">
-                <h2 class="user-card__name">{{ profile.name }}</h2>
-
-                <div class="user-card__skills">
-                    {% with skills=profile.skills.all %}
-                    {% for skill in skills|slice:":2" %}
+            <div class="user-card__skills">
+                {% for skill in profile.skills.all|slice:":2" %}
                     <span class="skill-chip">{{ skill.name }}</span>
-                    {% endfor %}
-
-                    {% if skills|length > 2 %}
-                    <span class="skill-chip">+ ещё</span>
-                    {% endif %}
-                    {% endwith %}
-
-                </div>
+                {% endfor %}
             </div>
         </div>
     </a>
-    {% endfor %}
+
+    <button class="like-btn" data-profile-id="{{ profile.id }}">
+        <img
+            src="{% static 'assets/icons/HeartOn.svg' if request.user in profile.liked_by.all else 'assets/icons/HeartOff.svg' %}"
+            alt="like"
+        >
+    </button>
+
 </div>
+
+{% endfor %}
+</div>
+
+
+
+
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const profileId = btn.dataset.profileId;
+
+        fetch(`/likes/toggle/${profileId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.querySelector('img').src = data.liked
+                ? '/static/assets/icons/HeartOn.svg'
+                : '/static/assets/icons/HeartOff.svg';
+        });
+    });
+});
+
+</script>
+
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+
+
+
+
+<form style="display:none;">{% csrf_token %}</form>
+
+
 
 {% endblock %}

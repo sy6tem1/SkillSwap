@@ -5,9 +5,16 @@ import json
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 
 
+
+
+@login_required
+def likes(request):
+    profiles = request.user.profile.likes.all()
+    return render(request, "likes.html", {"profiles": profiles})
 
 
 
@@ -19,6 +26,30 @@ def skills_list(request):
         [{"id": s.id, "name": s.name} for s in skills],
         safe=False
     )
+
+
+
+@login_required
+def toggle_like(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid method"}, status=405)
+
+    profile_id = request.POST.get("profile_id")
+    target = get_object_or_404(Profile, id=profile_id)
+    me = request.user.profile
+
+    if target in me.likes.all():
+        me.likes.remove(target)
+        liked = False
+    else:
+        me.likes.add(target)
+        liked = True
+
+    return JsonResponse({
+        "liked": liked,
+        "likes_count": target.liked_by.count()
+    })
+
 
 
 

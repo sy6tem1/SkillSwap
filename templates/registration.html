@@ -6,7 +6,7 @@
 {% csrf_token %}
 
 <div class="app-header">
-    <h2 class="focus-phrase">Привет!</h2>
+    <h2 class="focus-phrase" id='stepTitle'>Привет!</h2>
 </div>
 
 
@@ -94,7 +94,7 @@
 
 
 
-<div class="btn-next-container" onclick="nextStep()">
+<div class="btn-next-container" onclick="nextStep()" id='nextBtn'>
     <div class="btn-next">
         <button type="button" class="btn-next-text">
         Дальше
@@ -103,6 +103,28 @@
 </div>
 
 
+
+
+<script> //Шаги и кнопки
+const stepsConfig = {
+    1: {
+        title: 'Привет!',
+        button: 'Дальше'
+    },
+    2: {
+        title: 'Смотри какая красота!',
+        button: 'Почти готово'
+    },
+    3: {
+        title: 'А что ты умеешь?',
+        button: 'Ещё немного'
+    },
+    4: {
+        title: 'Оставь тг)',
+        button: 'Завершить'
+    }
+};
+</script>
 
 
 
@@ -125,31 +147,35 @@
 <script> // Переключение шагов
     let currentStep = 1;
 
-    function nextStep() {
-        if (currentStep === 1 && !validateName()) return;
-        if (currentStep === 3 && selectedSkills.length === 0) {
-            alert("Выбери хотя бы один навык");
-            return;
-        }
-        if (currentStep === 4 && !validateTelegram()) return;
+function nextStep() {
+    // Валидации
+    if (currentStep === 1 && !validateName()) return;
+    if (currentStep === 3 && selectedSkills.length === 0) return;
 
-        const current = document.querySelector(
-            `.reg-step[data-step="${currentStep}"]`
-        );
+    const current = document.querySelector(`.reg-step[data-step="${currentStep}"]`);
+    const next = document.querySelector(`.reg-step[data-step="${currentStep + 1}"]`);
 
-        const next = document.querySelector(
-            `.reg-step[data-step="${currentStep + 1}"]`
-        );
-
-        if (!next) {
-            submitRegistration();
-            return;
-        }
-
-        current.classList.remove("active");
-        next.classList.add("active");
-        currentStep++;
+    // Если следующего шага нет — завершаем регистрацию
+    if (!next) {
+        submitRegistration();
+        return;
     }
+
+    current.classList.remove('active');
+    next.classList.add('active');
+
+    currentStep++;
+
+    updateUI();
+}
+
+function updateUI() {
+    const title = document.getElementById('stepTitle');
+    const button = document.getElementById('nextBtn');
+
+    title.textContent = stepsConfig[currentStep].title;
+    button.textContent = stepsConfig[currentStep].button;
+}
 </script>
 
 

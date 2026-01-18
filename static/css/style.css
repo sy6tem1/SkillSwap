@@ -188,11 +188,13 @@ body {
     background: transparent;
     border-radius: 20px;
 
+
     text-decoration: none;
     color: inherit;
 
     display: flex;
     flex-direction: column;
+    position: relative;
 
 }
 
@@ -337,14 +339,18 @@ body {
     position: absolute;
     top: 12px;
     right: 12px;
+    z-index: 5;
+
     background: transparent;
     border: none;
-    padding: 0;
+    cursor: pointer;
 }
 
 .like-btn img {
     width: 20px;
     height: 20px;
+
+    pointer-events: none;
 }
 
 /* Пустой стейт */
@@ -582,9 +588,10 @@ body {
 }
 
 .skill-chip {
-    background: #ededed;
+    background: #ffffff;
     padding: 6px 12px;
     border-radius: 14px;
+
     font-size: 13px;
     cursor: pointer;
 }
