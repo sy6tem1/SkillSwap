@@ -1,0 +1,65 @@
+{% load static %}
+<html lang="ru">
+<head>
+    <link rel="icon" href="{% static 'assets/icons/SkillSwapIcon.svg' %}" type="image/svg+xml">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+
+<script src="{% static 'js/likes.js' %}"></script>
+
+
+<body>
+
+<div class="content-wrapper">
+    <header class="app-header">
+        
+        </form>
+    </header>
+
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% with request.resolver_match.url_name as current %}
+
+    <nav class="nav-pill">
+
+        <a href="{% url 'home' %}"
+           class="nav-item {% if current == 'home' %}active{% endif %}">
+            {% include 'icons/HomeOn.svg' %}
+        </a>
+
+        <a href="{% url 'likes' %}"
+           class="nav-item {% if current == 'likes' %}active{% endif %}">
+            {% include 'icons/HeartOn.svg' %}
+        </a>
+
+
+        <a href="{% url 'magic' %}"
+           class="nav-item {% if current == 'magic' %}active{% endif %}">
+            {% include 'icons/MagicOn.svg' %}
+        </a>
+
+
+        <a href="{% url 'profile' %}"
+           class="nav-item {% if current == 'profile' %}active{% endif %}">
+            {% include 'icons/ProfileOn.svg' %}
+        </a>
+
+    </nav>
+
+    {% endwith %}
+
+</div>
+
+</body>
+</html>

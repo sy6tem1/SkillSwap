@@ -1,10 +1,33 @@
-{% extends 'base.html' %}
+{% extends "base-no-search.html" %}
 {% load static %}
 
 {% block content %}
 
 
+<div class="app-header">
+        <h2 class="focus-phrase">
+            Смотри кто у нас есть!
+        </h2>
+</div>
 
 
+<div class="magic-container">
+    
+    {% if profile %}
+        <div class="magic-card">
+            <img src="{{ profile.photo.url }}" alt="{{ profile.name }}" class="magic-photo">
+            <h3>{{ profile.name }}</h3>
+            <p>Навыки:</p>
+            <div class="magic-skills">
+                {% for skill in profile.skills.all %}
+                    <span class="magic-skill">{{ skill.name }}</span>
+                {% endfor %}
+            </div>
+            <a href="{% url 'profile_detail' profile.slug %}" class="magic-button">Открыть профиль</a>
+        </div>
+    {% else %}
+        <p>Не найдено пользователей для тебя(</p>
+    {% endif %}
+</div>
 
 {% endblock %}

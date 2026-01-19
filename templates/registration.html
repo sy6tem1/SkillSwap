@@ -111,7 +111,7 @@ function validateName() {
     const value = input.value.trim().toLowerCase();
     if(value.length < 2 || badWords.some(w=>value.includes(w))){
         input.value = "";
-        input.placeholder = "Такое сюда вводить нельзя";
+        input.placeholder = "Такое сюда ввести не получится";
         input.classList.add("error");
         return false;
     } else {
@@ -126,6 +126,7 @@ function validateTelegram() {
     const input = document.getElementById("telegramInput");
     const value = input.value.trim();
     if(!value || (!value.startsWith("@") && !value.startsWith("https://t.me/"))){
+        input.value = "";
         input.classList.add("error");
         input.placeholder = "Неверный Telegram";
         return false;

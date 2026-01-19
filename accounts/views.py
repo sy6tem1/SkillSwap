@@ -1,3 +1,4 @@
+from random import random
 import uuid
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
@@ -8,6 +9,29 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+import secrets
+
+
+
+
+@login_required
+def magic(request):
+    me = request.user.profile
+
+    # Навыки текущего пользователя
+    my_skills = set(me.skills.values_list('id', flat=True))
+
+    # Профили, которые имеют хотя бы один навык, которого нет у меня
+    candidates = Profile.objects.exclude(id=me.id).filter(
+        skills__id__in=Skill.objects.exclude(id__in=my_skills)
+    ).distinct()
+
+    # Если есть кандидаты — выбираем случайного
+    selected_profile = random.choice(candidates) if candidates else None
+
+    return render(request, 'magic.html', {
+        'profile': selected_profile
+    })
 
 
 
@@ -117,32 +141,33 @@ def reg(request):
 
 
 @require_POST
+
 def register_profile(request):
-    name = request.POST.get("name", "").strip()
-    telegram = request.POST.get("telegram", "").strip()
+    if request.method != "POST":
+        return JsonResponse({"error": "POST only"}, status=400)
+
+    name = request.POST.get("name")
+    telegram = request.POST.get("telegram")
     skills_raw = request.POST.get("skills")
     photo = request.FILES.get("photo")
 
     if not name or not telegram:
-        return JsonResponse({
-            "success": False,
-            "error": "Заполните все поля"
-        }, status=400)
+        return JsonResponse({"error": "Не все поля заполнены"}, status=400)
 
-    # 🔐 уникальный username
-    base_username = name.lower().replace(" ", "_")
-    username = base_username
-    counter = 1
+    # Разбираем навыки
+    skills_ids = json.loads(skills_raw) if skills_raw else []
 
-    while User.objects.filter(username=username).exists():
-        counter += 1
-        username = f"{base_username}{counter}"
+    # Генерируем уникальное имя пользователя
+    username = f"user_{User.objects.count() + 1}"
+    temp_password = secrets.token_urlsafe(8)  # случайный безопасный пароль
 
+    # Создаём пользователя
     user = User.objects.create_user(
         username=username,
-        password=User.objects.make_random_password()
+        password=temp_password
     )
 
+    # Создаём профиль
     profile = Profile.objects.create(
         user=user,
         name=name,
@@ -150,18 +175,17 @@ def register_profile(request):
         photo=photo
     )
 
-    if skills_raw:
-        try:
-            skills_ids = json.loads(skills_raw)
-            profile.skills.set(
-                Skill.objects.filter(id__in=skills_ids)
-            )
-        except json.JSONDecodeError:
-            pass
+    # Привязываем навыки, если есть
+    if skills_ids:
+        profile.skills.set(
+            Skill.objects.filter(id__in=skills_ids)
+        )
 
+    # Автоматический вход пользователя
     login(request, user)
 
-    return JsonResponse({"success": True})
+    # Возвращаем успешный JSON
+    return JsonResponse({"success": True, "username": username})
 
 
 

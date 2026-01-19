@@ -131,3 +131,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://c240d73394ac.ngrok-free.app',
 ]
 
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 дней
+
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
