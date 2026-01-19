@@ -36,7 +36,26 @@ body {
 
     height: 100vh;
 
+    opacity: 1;
+    transition: opacity 0.9 ease-in-out;
+
 }
+
+
+body.fade-out {
+    opacity: 0.9;
+}
+
+body {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0 }
+    to   { opacity: 1 }
+}
+
+
 
 .content-wrapper {
     width: 100%;
@@ -48,6 +67,52 @@ body {
 
     display: flex;
     overflow: hidden;
+}
+
+/* ---------------------------------------- */
+/* MAIN CONTENT AREA */
+/* ---------------------------------------- */
+
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+
+    
+
+    /* iOS / Android */
+    -webkit-overflow-scrolling: touch;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* IE / Edge */
+    -ms-overflow-style: none;
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+
+    padding-top: var(--header-height);
+    padding-bottom: calc(var(--nav-height) + 40px);
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+
+/* Chrome / Safari */
+.main-content::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
 }
 
 /* ---------------------------------------- */
@@ -132,39 +197,6 @@ body {
 
 
 
-/* ---------------------------------------- */
-/* MAIN CONTENT AREA */
-/* ---------------------------------------- */
-
-
-.main-content {
-    flex: 1;
-    overflow-y: auto;
-
-    
-
-    /* iOS / Android */
-    -webkit-overflow-scrolling: touch;
-
-    /* Firefox */
-    scrollbar-width: none;
-
-    /* IE / Edge */
-    -ms-overflow-style: none;
-}
-
-/* Chrome / Safari */
-.main-content::-webkit-scrollbar {
-    display: none;
-}
-
-
-
-.container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--card-gap);
-}
 
 /* ---------------------------------------- */
 /* USER CARD */
@@ -172,8 +204,10 @@ body {
 
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 2fr));
+    gap: 25px;
+
+    padding: 0 20px 20px;
 }
 
 .user-card {
@@ -181,6 +215,7 @@ body {
     height: 215px;
     background: transparent;
     border-radius: 20px;
+
 
 
     text-decoration: none;
@@ -237,6 +272,34 @@ body {
     flex-wrap: wrap;
     gap: 6px;
 }
+
+
+.user-card__skills {
+    width: 100%;
+    overflow: hidden;
+}
+
+.skills-marquee {
+    width: 100%;
+    overflow: hidden;
+}
+
+.skills-track {
+    display: inline-flex;
+    gap: 6px;
+    white-space: nowrap;
+    width: max-content;  
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 
 .skill-chip {
     padding: 4px 10px;

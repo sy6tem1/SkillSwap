@@ -25,10 +25,15 @@
             <h2 class="user-card__name">{{ profile.name }}</h2>
 
             <div class="user-card__skills">
-                {% for skill in profile.skills.all|slice:":2" %}
-                    <span class="skill-chip">{{ skill.name }}</span>
-                {% endfor %}
+                <div class="skills-marquee">
+                    <div class="skills-track">
+                        {% for skill in profile.skills.all %}
+                            <span class="skill-chip">{{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -51,6 +56,28 @@
 </div>
 
 {% endfor %}
+
+
+<script>
+document.querySelectorAll("a").forEach(link => {
+    if (link.target === "_blank") return;
+
+    link.addEventListener("click", e => {
+        const href = link.getAttribute("href");
+
+        if (!href || href.startsWith("#")) return;
+
+        e.preventDefault();
+
+        document.body.classList.add("fade-out");
+
+        setTimeout(() => {
+            window.location.href = href;
+        }, 250);
+    });
+});
+</script>
+
 
 
 {% endblock %}
