@@ -215,3 +215,30 @@ def profile_detail(request, slug):
     return render(request, 'profile_detail.html', {
         'profile': profile
     })
+
+
+
+
+@login_required
+def profile_edit(request):
+    profile = request.user.profile
+
+    if request.method == "POST":
+        profile.name = request.POST.get("name")
+        profile.telegram = request.POST.get("telegram")
+        profile.description = request.POST.get("description")
+
+        if request.FILES.get("photo"):
+            profile.photo = request.FILES.get("photo")
+
+        skills_ids = request.POST.getlist("skills")
+        if skills_ids:
+            profile.skills.set(skills_ids)
+
+        profile.save()
+        return redirect("profile")
+
+    return render(request, "profile.html", {
+        "profile": profile,
+        "skills": Skill.objects.all()
+    })

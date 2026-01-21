@@ -1,0 +1,13 @@
+<img src="{{ profile.photo.url }}" class="profile-avatar">
+
+<h2>{{ profile.name }}</h2>
+
+<p class="profile-description">
+    {{ profile.description }}
+</p>
+
+<div class="skills-block">
+    {% for skill in profile.skills.all %}
+        <span class="skill-chip">{{ skill.name }}</span>
+    {% endfor %}
+</div>

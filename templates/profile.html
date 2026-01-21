@@ -1,26 +1,48 @@
 {% extends 'base-no-search.html' %}
 
 {% block content %}
-<div class="profile-page">
-    <h2>{{ profile.name }}</h2>
 
-    {% if profile.photo %}
-    <img src="{{ profile.photo.url }}" width="200">
-    {% endif %}
 
-    <p>{{ profile.description }}</p>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
 
-    <p>
-        Telegram:
-        <a href="https://t.me/{{ profile.telegram }}" target="_blank">
-            @{{ profile.telegram }}
-        </a>
-    </p>
+    <input
+        type="text"
+        name="name"
+        value="{{ profile.name }}"
+        placeholder="Имя"
+    >
 
-    <div>
-        {% for skill in profile.skills.all %}
-        <span class="skill-chip">{{ skill.name }}</span>
-        {% endfor %}
-    </div>
-</div>
+    <textarea
+        name="description"
+        placeholder="О себе"
+    >{{ profile.description }}</textarea>
+
+    <input
+        type="text"
+        name="telegram"
+        value="{{ profile.telegram }}"
+        placeholder="@telegram"
+    >
+
+    <input type="file" name="photo">
+
+    <!-- Навыки -->
+    {% for skill in skills %}
+        <label>
+            <input
+                type="checkbox"
+                name="skills"
+                value="{{ skill.id }}"
+                {% if skill in profile.skills.all %}checked{% endif %}
+            >
+            {{ skill.name }}
+        </label>
+    {% endfor %}
+
+    <button type="submit">Сохранить</button>
+</form>
+
+
+
 {% endblock %}
