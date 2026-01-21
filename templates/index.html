@@ -58,7 +58,7 @@
 {% endfor %}
 
 
-<script>
+{% comment %} <script>
 document.querySelectorAll("a").forEach(link => {
     if (link.target === "_blank") return;
 
@@ -77,7 +77,7 @@ document.querySelectorAll("a").forEach(link => {
     });
 });
 </script>
-
+ {% endcomment %}
 
 
 {% endblock %}

@@ -15,7 +15,7 @@
 <script src="{% static 'js/likes.js' %}"></script>
 
 
-<body>
+<body сlass="page">
 
 <div class="content-wrapper">
     <header class="app-header">
@@ -73,6 +73,29 @@
     {% endwith %}
 
 </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.remove("page-leave");
+
+    document.querySelectorAll("a").forEach(link => {
+        if (link.target === "_blank") return;
+        if (link.href.includes("#")) return;
+
+        link.addEventListener("click", e => {
+            e.preventDefault();
+            document.body.classList.add("page-leave");
+
+            setTimeout(() => {
+                window.location = link.href;
+            }, 300);
+        });
+    });
+});
+</script>
+
+
 
 </body>
 </html>

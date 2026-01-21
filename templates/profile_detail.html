@@ -10,36 +10,16 @@
         </div>
 
 
-<div class="content-wrapper">
-    <div class="main-content">
-
-
-        <div class="profile-detail-container">
-
-            <div class="profile-avatar-detailed">
-                <img class="profile-avatar-detailed" src="{{ profile.avatar.url }}" alt="Аватар пользователя">
-            </div>
-
-            <div class="profile-skills-detailed-container">
-                <h2 class="profile-skills-detailed">{{ profile.skills }}</h2>
-            </div>
-
-            
-            <p class="profile-bio-detailed">{{ profile.description }}</p>
-
-
-            <form method="post" action="{% url 'like_profile' profile.id %}">
-                {% csrf_token %}
-                <button type="submit">Добавить в понравившиеся</button>
-            </form>
+<div class="profile-detail-container">
 
 
             
+    {% comment %} Сюда писать {% endcomment %}
 
 
-        </div>
-    </div>
-</div>
+
+ </div>
 
 
-{% endblock %}
+
+{% endblock %} 
