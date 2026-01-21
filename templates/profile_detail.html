@@ -39,10 +39,10 @@
 
     <!-- TELEGRAM -->
     <div class="telegram-block">
-        <a href="https://t.me/{{ profile.telegram }}"
+        <a href="https://t.me/{{ profile.telegram|cut:"@"  }}"
            target="_blank"
            class="telegram-button">
-            Написать в Telegram ({{ profile.telegram }})
+            Написать в Telegram (@{{ profile.telegram|cut:"@"  }})
         </a>
     </div>
 
@@ -57,7 +57,7 @@
 
 {% endblock %}
 
-            
+
     {% comment %} Сюда писать {% endcomment %}
 
 
