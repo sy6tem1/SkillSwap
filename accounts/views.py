@@ -141,7 +141,6 @@ def reg(request):
 
 
 @require_POST
-
 def register_profile(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST only"}, status=400)
@@ -209,6 +208,8 @@ def login_view(request):
 from django.shortcuts import render, get_object_or_404
 from .models import Profile
 
+
+
 def profile_detail(request, slug):
     profile = get_object_or_404(Profile, slug=slug)
 
@@ -224,21 +225,25 @@ def profile_edit(request):
     profile = request.user.profile
 
     if request.method == "POST":
-        profile.name = request.POST.get("name")
-        profile.telegram = request.POST.get("telegram")
-        profile.description = request.POST.get("description")
+        name = request.POST.get("name", "")
+        telegram = request.POST.get("telegram", "")
+        skills_raw = request.POST.get("skills", "[]")
 
-        if request.FILES.get("photo"):
-            profile.photo = request.FILES.get("photo")
+        try:
+            skills_ids = json.loads(skills_raw)
+        except json.JSONDecodeError:
+            skills_ids = []
 
-        skills_ids = request.POST.getlist("skills")
-        if skills_ids:
-            profile.skills.set(skills_ids)
-
+        profile.name = name
+        profile.telegram = telegram
+        profile.skills.set(
+            Skill.objects.filter(id__in=skills_ids)
+        )
         profile.save()
-        return redirect("profile")
 
+        return redirect("profile_edit")
+
+    # ✅ ВОТ ЭТОГО У ТЕБЯ НЕ ХВАТАЛО
     return render(request, "profile.html", {
         "profile": profile,
-        "skills": Skill.objects.all()
     })

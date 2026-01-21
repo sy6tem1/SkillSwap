@@ -1,8 +1,11 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 {% extends "base-no-nav.html" %}
 {% load static %}
 
 {% block content %}
+
+
+
 
 <div class = 'app-header'>
             <h2 class = 'focus-phrase'>{% if profile.name %}{{ profile.name }}{% else %}Профиль{% endif %}</h2>
@@ -45,6 +48,14 @@
             Написать в Telegram (@{{ profile.telegram|cut:"@"  }})
         </a>
     </div>
+
+    
+    {% if request.user.is_authenticated and request.user == profile.user %}
+        <a href="{% url 'profile' %}" class="btn-secondary">
+            Редактировать профиль
+        </a>
+    {% endif %}
+
 
     <!-- КНОПКА ВОЗВРАТА -->
     <div class="back-button">
