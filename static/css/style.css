@@ -803,18 +803,106 @@ body.page-leave {
 .magic-button:hover {
     background-color: #357ae8;
 }
-.profile-avatar {
-    width: 150px;       /* ширина аватара */
-    height: 150px;      /* высота аватара */
-    object-fit: cover;  /* обрезает лишнее, сохраняя пропорции */
-    border-radius: 50%; /* делает аватар круглым */
-    border: 2px solid #ccc; /* тонкая рамка, по желанию */
-}
+
+
+
+/* ===== PROFILE DETAIL PAGE ===== */
+
 .profile-detail-container {
-    top: var(--header-height);
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    gap: 20px;
+
+    padding: 24px 20px 40px;
 }
+
+/* Аватар */
+.profile-avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Имя */
+.profile-detail-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Описание */
+.profile-description {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #666;
+    text-align: center;
+    max-width: 320px;
+}
+
+/* Навыки */
+.skills-block {
+    width: 100%;
+}
+
+.skills-block h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.skills-block span.skill-chip {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--gray-light);
+    font-size: 13px;
+    margin: 4px 4px 0 0;
+}
+
+
+.telegram-block {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.telegram-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+
+    padding: 14px 16px;
+    border-radius: 14px;
+
+    background: var(--blue-prime);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+
+/* Кнопка назад */
+.back-button {
+    margin-top: 12px;
+}
+
+.btn-back {
+    font-size: 16px;
+    color: var(--gray-text);
+    text-decoration: none;
+}
+
+.btn-back:hover {
+    text-decoration: underline;
+}
+
 
