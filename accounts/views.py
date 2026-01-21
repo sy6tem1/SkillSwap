@@ -206,3 +206,12 @@ def login_view(request):
     login(request, user)
     return JsonResponse({"success": True})
 
+from django.shortcuts import render, get_object_or_404
+from .models import Profile
+
+def profile_detail(request, slug):
+    profile = get_object_or_404(Profile, slug=slug)
+
+    return render(request, 'profile_detail.html', {
+        'profile': profile
+    })

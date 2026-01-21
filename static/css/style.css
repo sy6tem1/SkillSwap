@@ -728,7 +728,7 @@ body.page-leave {
 
 .profile-detail-container {
     padding: 16px;
-    
+
 }
 
 .profile-avatar-detailed {
@@ -803,3 +803,18 @@ body.page-leave {
 .magic-button:hover {
     background-color: #357ae8;
 }
+.profile-avatar {
+    width: 150px;       /* ширина аватара */
+    height: 150px;      /* высота аватара */
+    object-fit: cover;  /* обрезает лишнее, сохраняя пропорции */
+    border-radius: 50%; /* делает аватар круглым */
+    border: 2px solid #ccc; /* тонкая рамка, по желанию */
+}
+.profile-detail-container {
+    top: var(--header-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+}
+

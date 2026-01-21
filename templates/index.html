@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% csrf_token %}
+
 
 {% block content %}
 
@@ -10,8 +10,7 @@
 {% for profile in profiles %}
 
 <div class="user-card">
-
-    <div href="{% url 'profile_detail' profile.slug %}" class="user-card-link">
+    <a href="{% url 'profile_detail' profile.slug %}" class="user-card-link">
         <div class="user-card__avatar" >
             {% if profile.photo %}
                 <img src="{{ profile.photo.url }}">
@@ -35,7 +34,7 @@
             </div>
 
         </div>
-    </div>
+    </a>
 
     <form class="like-form" data-profile-id="{{ profile.id }}">
         {% csrf_token %}
