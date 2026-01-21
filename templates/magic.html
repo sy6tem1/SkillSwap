@@ -26,7 +26,15 @@
             <a href="{% url 'profile_detail' profile.slug %}" class="magic-button">Открыть профиль</a>
         </div>
     {% else %}
-        <p>Не найдено пользователей для тебя(</p>
+        <p style="font-weight: 600; 
+        color: var(--gray-text); 
+        font-size: 18px; 
+        text-align: center;
+
+        ">
+        
+        Не найдено пользователей для тебя(
+    </p>
     {% endif %}
 </div>
 

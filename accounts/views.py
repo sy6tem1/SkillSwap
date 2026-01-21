@@ -243,7 +243,6 @@ def profile_edit(request):
 
         return redirect("profile_edit")
 
-    # ✅ ВОТ ЭТОГО У ТЕБЯ НЕ ХВАТАЛО
     return render(request, "profile.html", {
         "profile": profile,
     })
