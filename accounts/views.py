@@ -36,15 +36,26 @@ def magic(request):
 
 
 
+
+from django.http import JsonResponse
 @require_POST
 @login_required
 def toggle_like(request):
-    profile_id = request.POST.get("profile_id")
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "not_authenticated"}, status=403)
 
+    if request.method != "POST":
+        return JsonResponse({"error": "POST only"}, status=400)
+
+    profile_id = request.POST.get("profile_id")
     if not profile_id:
         return JsonResponse({"error": "No profile id"}, status=400)
 
     profile = get_object_or_404(Profile, id=profile_id)
+
+    # Проверка, чтобы нельзя было лайкать себя
+    if hasattr(profile, 'user') and profile.user == request.user:
+        return JsonResponse({"error": "Cannot like yourself"}, status=400)
 
     like, created = Like.objects.get_or_create(
         from_user=request.user,
@@ -57,9 +68,7 @@ def toggle_like(request):
     else:
         liked = True
 
-    return JsonResponse({
-        "liked": liked,
-    })
+    return JsonResponse({"liked": liked})
 
 
 
@@ -81,7 +90,6 @@ def skills_list(request):
         [{"id": s.id, "name": s.name} for s in skills],
         safe=False
     )
-
 
 
 
