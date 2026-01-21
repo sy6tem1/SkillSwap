@@ -1,4 +1,3 @@
-# Default ignored files
 /shelf/
 /workspace.xml
 /httpRequests/
@@ -11,3 +10,4 @@ __pycache__/
 /__pycache__/
 *.py[cod]
 *$py.class
+venv/
