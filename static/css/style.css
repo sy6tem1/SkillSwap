@@ -904,5 +904,23 @@ body.page-leave {
 .btn-back:hover {
     text-decoration: underline;
 }
+.profile-container {
+    text-align: center; /* центрируем всё внутри контейнера */
+    margin-top: 20px;
+}
+
+.avatar-wrapper {
+    display: flex;
+    justify-content: center; /* центрируем по горизонтали */
+    margin-bottom: 10px;
+}
+
+.profile-avatar {
+    width: 150px; /* размер аватарки */
+    height: 150px;
+    border-radius: 50%; /* чтобы было круглое */
+    object-fit: cover; /* обрезает фото по форме круга */
+    border: 2px solid #ccc;
+}
 
 

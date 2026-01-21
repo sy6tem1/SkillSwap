@@ -223,3 +223,24 @@ def profile_detail(request, slug):
     return render(request, 'profile_detail.html', {
         'profile': profile
     })
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+
+@login_required
+def profile(request):
+    if hasattr(request.user, 'profile'):
+        profile = request.user.profile
+    else:
+        profile = None
+    return render(request, 'profile.html', {'profile': profile})
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile  # если у тебя есть модель Profile
+    if request.method == 'POST':
+        # здесь логика обновления профиля
+        pass
+    return render(request, 'edit_profile.html', {'profile': profile})
