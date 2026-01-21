@@ -12,7 +12,9 @@ from django.contrib.auth import login
 import secrets
 
 
-
+from django.contrib.auth.decorators import login_required
+from .models import Profile, Skill, ProfileView
+import random
 
 @login_required
 def magic(request):
@@ -26,6 +28,10 @@ def magic(request):
         skills__id__in=Skill.objects.exclude(id__in=my_skills)
     ).distinct()
 
+    # Исключаем профили, которые я уже видел
+    viewed_ids = ProfileView.objects.filter(viewer=request.user).values_list('viewed_id', flat=True)
+    candidates = candidates.exclude(id__in=viewed_ids)
+
     # Если есть кандидаты — выбираем случайного
     selected_profile = random.choice(candidates) if candidates else None
 
@@ -33,6 +39,29 @@ def magic(request):
         'profile': selected_profile
     })
 
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from .models import ProfileView  # твоя модель для просмотров
+
+User = get_user_model()
+
+
+@login_required
+def mark_viewed(request, profile_id):
+    # Получаем пользователя, которого просматриваем
+    viewed_user = get_object_or_404(User, id=profile_id)
+
+    # Создаём запись просмотра
+    ProfileView.objects.get_or_create(viewer=request.user, viewed=viewed_user)
+
+    return redirect('magic')
+@login_required
+def like_profile(request, profile_id):
+    profile = get_object_or_404(Profile, id=profile_id)
+    # Добавляем лайк (предполагаем ManyToManyField в Profile: likes = models.ManyToManyField(User, related_name='liked_by'))
+    profile.likes.add(request.user)
+    return redirect('magic')
 
 
 

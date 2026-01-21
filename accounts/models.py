@@ -107,3 +107,15 @@ class Like(models.Model):
     def __str__(self):
         return f'{self.from_user} -> {self.to_profile}'
 
+from django.conf import settings
+from django.db import models
+
+User = settings.AUTH_USER_MODEL
+
+class ProfileView(models.Model):
+    viewer = models.ForeignKey(User, related_name='views_made', on_delete=models.CASCADE)
+    viewed = models.ForeignKey(User, related_name='views_received', on_delete=models.CASCADE)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('viewer', 'viewed')

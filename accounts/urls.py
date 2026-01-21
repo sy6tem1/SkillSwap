@@ -3,6 +3,9 @@ from . import views
 from .views import profile_detail, login_view
 
 urlpatterns = [
+    path('magic/', views.magic, name='magic'),
+    path('magic/like/<int:profile_id>/', views.like_profile, name='like_profile'),
+    path('magic/viewed/<int:profile_id>/', views.mark_viewed, name='mark_viewed'),
     path('edit/', views.edit_profile, name='edit_profile'),
     path('profile/', views.profile, name='profile'),
     path('profiles/<slug:slug>/', profile_detail, name='profile_detail'),

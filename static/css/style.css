@@ -654,26 +654,33 @@ body.page-leave {
 
 .skills-step {
     top: 70px;
-
-
     width: 100%;
     max-width: 320px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column; /* навыки под инпутом */
+    gap: 8px; /* расстояние между инпутом и выбранными навыками */
 }
 
-.skills-dropdown {
 
+.skills-dropdown {
     list-style: none;
     background: #ffffff;
 
     border-radius: 16px;
     margin-top: 8px;
     padding: 6px;
-    max-height: 40px;
-
+    max-height: 150px; /* увеличил, чтобы показывалось несколько навыков */
+    overflow-y: auto;
 
     display: none;
+
+    position: absolute;  /* позиционируем относительно родителя */
+    width: 100%;         /* чтобы ширина совпадала с инпутом */
+    top: -160px;         /* поднимаем вверх (регулируем по необходимости) */
+    z-index: 1000;       /* чтобы было над всем */
 }
+
 
 .skills-dropdown li {
     padding: 8px 12px;
@@ -686,13 +693,13 @@ body.page-leave {
     background: #ededed;
 }
 
+
 .selected-skills {
     display: flex;
+    position: fixed;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 14px;
-
-
+    margin-top: 120px; /* небольшое расстояние от инпута */
 }
 
 .skill-chip {
