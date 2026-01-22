@@ -1,44 +1,46 @@
 from random import random
-import uuid
-from django.shortcuts import render, get_object_or_404, redirect
+
 from django.contrib.auth.models import User
 from .models import Profile, Skill, Like
 import json
 from django.contrib.auth import authenticate, login
-from django.http import JsonResponse
+
 from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth import login
 import secrets
 
 
-from django.contrib.auth.decorators import login_required
-from .models import Profile, Skill, ProfileView
+
 import random
+from django.contrib.auth.decorators import login_required
+
+from .models import Profile, Skill, ProfileView
+
 
 @login_required
 def magic(request):
     me = request.user.profile
 
-    # Навыки текущего пользователя
-    my_skills = set(me.skills.values_list('id', flat=True))
+    my_skills = me.skills.values_list('id', flat=True)
 
-    # Профили, которые имеют хотя бы один навык, которого нет у меня
-    candidates = Profile.objects.exclude(id=me.id).filter(
+    viewed_profiles = ProfileView.objects.filter(
+        viewer=request.user
+    ).values_list('viewed_id', flat=True)
+
+    candidates = Profile.objects.exclude(
+        id=me.id
+    ).exclude(
+        id__in=viewed_profiles
+    ).filter(
         skills__id__in=Skill.objects.exclude(id__in=my_skills)
     ).distinct()
 
-    # Исключаем профили, которые я уже видел
-    viewed_ids = ProfileView.objects.filter(viewer=request.user).values_list('viewed_id', flat=True)
-    candidates = candidates.exclude(id__in=viewed_ids)
-
-    # Если есть кандидаты — выбираем случайного
-    selected_profile = random.choice(candidates) if candidates else None
+    selected_profile = random.choice(list(candidates)) if candidates.exists() else None
 
     return render(request, 'magic.html', {
         'profile': selected_profile
     })
-
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -253,7 +255,6 @@ def profile_detail(request, slug):
     return render(request, 'profile_detail.html', {
         'profile': profile
     })
-<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
@@ -275,7 +276,7 @@ def edit_profile(request):
         # здесь логика обновления профиля
         pass
     return render(request, 'edit_profile.html', {'profile': profile})
-=======
+
 
 
 
@@ -306,4 +307,3 @@ def profile_edit(request):
     return render(request, "profile.html", {
         "profile": profile,
     })
->>>>>>> 03664c9cec506ea076873ed51c6c6f9ece0d5b27
