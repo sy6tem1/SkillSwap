@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 
 from django.contrib.auth import login
 import secrets
-
+from .decorators import profile_required
 
 
 import random
@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Profile, Skill, ProfileView
 
-
+@profile_required
 @login_required
 def magic(request):
     me = request.user.profile
@@ -58,7 +58,11 @@ def mark_viewed(request, profile_id):
     ProfileView.objects.get_or_create(viewer=request.user, viewed=viewed_user)
 
     return redirect('magic')
+
+
+
 @login_required
+@profile_required
 def like_profile(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     # Добавляем лайк (предполагаем ManyToManyField в Profile: likes = models.ManyToManyField(User, related_name='liked_by'))
@@ -69,8 +73,12 @@ def like_profile(request, profile_id):
 
 
 from django.http import JsonResponse
-@require_POST
+
+
+
 @login_required
+@profile_required
+@require_POST
 def toggle_like(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "not_authenticated"}, status=403)
@@ -106,6 +114,7 @@ def toggle_like(request):
 
 
 @login_required
+@profile_required
 def likes_list(request):
     likes = Like.objects.filter(from_user=request.user)
     return render(request, 'likes.html', {'likes': likes})
@@ -125,6 +134,7 @@ def skills_list(request):
 
 
 @login_required
+@profile_required
 def like_profile(request, profile_id):
     if request.method != 'POST':
         return redirect('/')
@@ -248,7 +258,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Profile
 
 
-
+@profile_required
 def profile_detail(request, slug):
     profile = get_object_or_404(Profile, slug=slug)
 
@@ -274,6 +284,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 
+@profile_required
 @login_required
 def profile_edit(request):
     profile = request.user.profile
@@ -285,8 +296,6 @@ def profile_edit(request):
 
         if request.FILES.get("photo"):
             profile.photo = request.FILES["photo"]
-
-
 
         profile.save()
 
