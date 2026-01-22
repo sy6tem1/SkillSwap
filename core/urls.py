@@ -54,21 +54,14 @@ def likes(request):
 def reg(request):
     return render(request, 'registration.html')
 
-@login_required
-def profile_edit(request):
-    profile = request.user.profile
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    path('profile/', profile, name='profile'),
     path('magic/', magic, name='magic'),
     path('likes/', likes, name='likes'),
     path('reg/', reg, name='reg'),
     path('', include('accounts.urls')),
     path("accounts/", include("accounts.urls")),
-    path('profile/edit/', profile_edit, name='profile_edit')
 
 ]
 

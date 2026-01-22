@@ -178,7 +178,6 @@ def reg(request):
 
 
 @require_POST
-
 def register_profile(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST only"}, status=400)
@@ -246,12 +245,15 @@ def login_view(request):
 from django.shortcuts import render, get_object_or_404
 from .models import Profile
 
+
+
 def profile_detail(request, slug):
     profile = get_object_or_404(Profile, slug=slug)
 
     return render(request, 'profile_detail.html', {
         'profile': profile
     })
+<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
@@ -273,3 +275,35 @@ def edit_profile(request):
         # здесь логика обновления профиля
         pass
     return render(request, 'edit_profile.html', {'profile': profile})
+=======
+
+
+
+
+@login_required
+def profile_edit(request):
+    profile = request.user.profile
+
+    if request.method == "POST":
+        name = request.POST.get("name", "")
+        telegram = request.POST.get("telegram", "")
+        skills_raw = request.POST.get("skills", "[]")
+
+        try:
+            skills_ids = json.loads(skills_raw)
+        except json.JSONDecodeError:
+            skills_ids = []
+
+        profile.name = name
+        profile.telegram = telegram
+        profile.skills.set(
+            Skill.objects.filter(id__in=skills_ids)
+        )
+        profile.save()
+
+        return redirect("profile_edit")
+
+    return render(request, "profile.html", {
+        "profile": profile,
+    })
+>>>>>>> 03664c9cec506ea076873ed51c6c6f9ece0d5b27

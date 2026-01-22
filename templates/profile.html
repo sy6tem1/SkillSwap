@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+<<<<<<< HEAD
 <div class="profile-container">
 
     <!-- Аватарка -->
@@ -63,6 +64,123 @@
     background-color: #0056b3;
 }
 </style>
+=======
+
+
+<div class="app-header">
+    <h2 class="focus-phrase">Мой профиль</h2>
+</div>
+
+<div class="profile-edit-container">
+
+    <form method="post" enctype="multipart/form-data" class="profile-edit-form">
+        {% csrf_token %}
+
+        <input type="hidden" name="skills" id="skillsField">
+
+        <!-- Аватар -->
+        <div class="profile-avatar-edit">
+            <label class="avatar-label">
+                {% if profile.photo %}
+                    <img src="{{ profile.photo.url }}" class="avatar-preview">
+                {% else %}
+                    <img src="{% static 'assets/images/123.jpg' %}" class="avatar-preview">
+                {% endif %}
+                <span class="avatar-change">Изменить фото</span>
+                <input type="file" name="photo" hidden>
+            </label>
+        </div>
+
+        <!-- Имя -->
+        <input
+            type="text"
+            name="name"
+            class="reg-field-input"
+            placeholder="Имя"
+            value="{{ profile.name }}"
+        >
+
+        <!-- Описание -->
+        <textarea
+            name="description"
+            class="reg-field-input textarea"
+            placeholder="О себе"
+        >{{ profile.description }}</textarea>
+
+        <!-- Telegram -->
+        <input
+            type="text"
+            name="telegram"
+            class="reg-field-input"
+            placeholder="@telegram"
+            value="{{ profile.telegram }}"
+        >
+
+        <!-- Навыки -->
+        <div class="skills-edit-block">
+
+            <p class="section-title">Навыки</p>
+
+            <div class="skills-step">
+
+                <input
+                    type="text"
+                    id="skillInput"
+                    placeholder="Добавить навык"
+                    class="reg-field-input"
+                    autocomplete="off"
+                >
+
+                <ul id="skillsDropdown" class="skills-dropdown"></ul>
+
+                <div id="selectedSkills" class="selected-skills"></div>
+
+            </div>
+
+        </div>
+
+        <!-- Кнопки -->
+        <div class="profile-actions">
+
+
+            <a href="{% url 'profile_detail' profile.slug %}" class="btn-secondary">
+                Посмотреть профиль
+            </a>
+
+
+            <button type="submit" class="btn-primary">
+                Сохранить
+            </button>
+
+            
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+const form = document.querySelector(".profile-edit-form");
+
+form.addEventListener("submit", () => {
+    document.getElementById("skillsField").value =
+        JSON.stringify(selectedSkills);
+});
+</script>
+
+
+
+
+<script>
+    const initialSkills = [
+        {% for skill in profile.skills.all %}
+            { id: {{ skill.id }}, name: "{{ skill.name }}" },
+        {% endfor %}
+    ];
+</script>
+<script src="{% static 'assets/js/skills_input.js' %}"></script>
+>>>>>>> 03664c9cec506ea076873ed51c6c6f9ece0d5b27
 
 {% endblock %}
 

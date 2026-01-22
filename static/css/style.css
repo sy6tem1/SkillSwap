@@ -309,11 +309,15 @@ body.page-leave {
 .skills-track {
     display: inline-flex;
     gap: 6px;
-    white-space: nowrap;
     width: max-content;  
 }
 
-@keyframes marquee {
+
+.skills-track.is-animated {
+    animation: scroll-skills 15s linear infinite;
+}
+
+@keyframes scroll-skills {
     from {
         transform: translateX(0);
     }
@@ -327,9 +331,12 @@ body.page-leave {
     padding: 4px 10px;
     border-radius: 14px;
 
-    font-size: 11px;
+    font-size: 12px;
     background: #fff;
-    color: #000;
+    color: #000000;
+
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .skill-tag {
@@ -338,9 +345,16 @@ body.page-leave {
     border: 1px solid var(--gray-text);
     padding: 4px 10px;
     border-radius: 14px;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--black);
     margin: 2px 2px 0 0;
+}
+
+
+@media (max-width: 768px) {
+    .skills-track {
+        animation-duration: 20s;
+    }
 }
 
 /* ---------------------------------------- */
@@ -436,14 +450,16 @@ body.page-leave {
 .empty-likes {
     margin-top: 60px;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
 
 }
 
 
 .empty-likes p {
-    font-size: 16px;
-    color: var(--gray-text);
+    font-size: 18px;
+    color: var(--blue-prime);
+
+
     margin-bottom: 12px;
 }
 
@@ -452,6 +468,7 @@ body.page-leave {
     padding: 10px 18px;
     background-color: var(--blue-prime);
     color: var(--white);
+    
     border-radius: 20px;
     text-decoration: none;
     font-weight: 600;
@@ -931,3 +948,132 @@ body.page-leave {
 }
 
 
+
+
+/* ===== Profile Edit ===== */
+
+.profile-edit-container {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Avatar */
+
+.profile-avatar-edit {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.avatar-label {
+    position: relative;
+    cursor: pointer;
+}
+
+.avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-change {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: white;
+    
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+/* Inputs */
+
+
+.textarea {
+    min-height: 40px;
+    resize: none;
+
+    overflow: hidden;
+    padding: 16px;
+    height: fit-content;
+}
+
+/* Skills */
+
+.skills-edit-block {
+    margin-top: 10px;
+}
+
+.section-title {
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: var(--gray-text);
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #2c2c2e;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.skill-checkbox input {
+    display: none;
+}
+
+.skill-checkbox input:checked + span {
+    color: #6cf;
+}
+
+/* Buttons */
+
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    flex: 1;
+    background: var(--blue-prime);
+    color: white;
+    border: none;
+    padding: 14px;
+
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.btn-secondary {
+    flex: 1;
+    text-align: center;
+    padding: 14px;
+    border-radius: 30px;
+    background: var(--gray-light);
+
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+}
