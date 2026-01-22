@@ -33,3 +33,57 @@
 
 </body>
 </html>
+
+
+
+<script>
+(() => {
+    const fade = document.getElementById("page-fade");
+    let isTransitioning = false;
+
+    function fadeAndGo(url) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        if (fade) {
+            fade.classList.add("active");
+            setTimeout(() => {
+                window.location.href = url;
+            }, 380);
+        } else {
+            window.location.href = url;
+        }
+    }
+
+    // Перехват кликов по ссылкам
+    document.addEventListener("click", e => {
+        const a = e.target.closest("a");
+        if (!a) return;
+
+        if (
+            a.target === "_blank" ||
+            a.hasAttribute("download") ||
+            a.href.startsWith("javascript:")
+        ) {
+            return;
+        }
+
+        e.preventDefault();
+        fadeAndGo(a.href);
+    });
+
+    // Перехват submit форм
+    document.addEventListener("submit", e => {
+        e.preventDefault();
+        fadeAndGo(e.target.action);
+    });
+
+    // Сброс overlay при возврате (back/forward)
+    window.addEventListener("pageshow", () => {
+        isTransitioning = false;
+        if (fade) fade.classList.remove("active");
+    });
+})();
+</script>
+
+

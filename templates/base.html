@@ -80,56 +80,59 @@
 </div>
 
 
+</body>
+</html>
+
+
+
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
     const fade = document.getElementById("page-fade");
-    if (fade) {
-        fade.classList.remove("active");
+    let isTransitioning = false;
+
+    function fadeAndGo(url) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        if (fade) {
+            fade.classList.add("active");
+            setTimeout(() => {
+                window.location.href = url;
+            }, 380);
+        } else {
+            window.location.href = url;
+        }
     }
-});
 
-document.addEventListener("click", e => {
-    const link = e.target.closest("a");
-    if (!link) return;
+    // Перехват кликов по ссылкам
+    document.addEventListener("click", e => {
+        const a = e.target.closest("a");
+        if (!a) return;
 
-    if (
-        link.target === "_blank" ||
-        link.hasAttribute("download") ||
-        link.href.startsWith("javascript:")
-    ) {
-        return;
-    }
+        if (
+            a.target === "_blank" ||
+            a.hasAttribute("download") ||
+            a.href.startsWith("javascript:")
+        ) {
+            return;
+        }
 
-    e.preventDefault();
+        e.preventDefault();
+        fadeAndGo(a.href);
+    });
 
-    const fade = document.getElementById("page-fade");
-    if (fade) {
-        fade.classList.add("active");
-        setTimeout(() => {
-            window.location.href = link.href;
-        }, 300);
-    } else {
-        window.location.href = link.href;
-    }
-});
+    // Перехват submit форм
+    document.addEventListener("submit", e => {
+        e.preventDefault();
+        fadeAndGo(e.target.action);
+    });
 
-document.addEventListener("submit", () => {
-    const fade = document.getElementById("page-fade");
-    if (fade) fade.classList.add("active");
-});
-
-
-
-
+    // Сброс overlay при возврате (back/forward)
+    window.addEventListener("pageshow", () => {
+        isTransitioning = false;
+        if (fade) fade.classList.remove("active");
+    });
+})();
 </script>
 
 
-
-
-
-
-
-
-
-</body>
-</html>
