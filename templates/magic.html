@@ -14,12 +14,12 @@
     {% if profile %}
         <div class="magic-card">
             {% if profile.photo %}
-        <img src="{{ profile.photo.url }}" class="profile-avatar">
+        <img src="{{ profile.photo.url }}" class="profile-avatar" style='margin-bottom: 20px;'>
     {% else %}
-        <img src="{% static 'img/default-avatar.png' %}" class="profile-avatar">
+        <img src="{% static 'img/default-avatar.png' %}" class="profile-avatar" style='margin-bottom: 20px;'>
     {% endif %}
 
-            <h3>{{ profile.name }}</h3>
+            <h3 style="margin-bottom: 10px; font-size: 18px;">{{ profile.name }}</h3>
             <p>Навыки:</p>
             <div class="magic-skills">
                 {% for skill in profile.skills.all %}
@@ -30,17 +30,24 @@
             <!-- Кнопка открытия профиля -->
             <a href="{% url 'profile_detail' profile.slug %}" class="magic-button">Открыть профиль</a>
 
-            <!-- Кнопка лайка -->
-            <form method="post" action="{% url 'like_profile' profile.id %}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="magic-button like-button">❤️ Лайк</button>
-            </form>
+            <div class="magic-actions" style="margin-top: 10px">
+                <!-- Кнопка лайка -->
+                <form method="post" action="{% url 'like_profile' profile.id %}" style="display:inline; height : 70px; ">
+                    {% csrf_token %}
+                    <button type="submit" class="magic-button like-button" style="background-color: white; border-radius: 50px;  ">
+                        <img src="{% static 'assets/icons/HeartOff.svg' %}" alt="Like" style="width : 50px; height : 50px; vertical-align:middle;">
+                    </button>
+                </form>
 
-            <!-- Кнопка "Просмотрено" -->
-            <form method="post" action="{% url 'mark_viewed' profile.id %}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="magic-button viewed-button">👁️ Просмотрено</button>
-            </form>
+                <!-- Кнопка "Просмотрено" -->
+                <form method="post" action="{% url 'mark_viewed' profile.id %}" style="display:inline; height : 70px">
+                    {% csrf_token %}
+                    <button type="submit" class="magic-button viewed-button" style="background-color: white; border-radius: 50px; ">
+                        <img src="{% static 'assets/icons/ArrowRight.svg' %}" alt="Like" style="width : 50px; height : 50px; vertical-align:middle;">
+                    </button>
+                </form>
+
+            </div>
         </div>
     {% else %}
         <p style="font-weight: 600; 
@@ -56,77 +63,8 @@
 
 </div>
 
-<style>
-.magic-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-}
 
-.magic-card {
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    width: 320px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
 
-.magic-photo {
-    width: 100%;
-    border-radius: 12px;
-    object-fit: cover;
-    margin-bottom: 15px;
-}
-
-.magic-skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-    margin-bottom: 15px;
-}
-
-.magic-skill {
-    background-color: #f0f0f0;
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-}
-
-.magic-button {
-    margin: 5px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 8px;
-    background-color: #4f46e5;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-.magic-button:hover {
-    background-color: #3730a3;
-}
-
-.like-button {
-    background-color: #ec4899;
-}
-
-.like-button:hover {
-    background-color: #be185d;
-}
-
-.viewed-button {
-    background-color: #10b981;
-}
-
-.viewed-button:hover {
-    background-color: #047857;
-}
-</style>
 
 {% endblock %}
 

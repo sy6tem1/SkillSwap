@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from unidecode import unidecode
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
+
+
+from accounts.management.commands.image import compress_image
 
 
 
@@ -35,9 +39,14 @@ class Profile(models.Model):
 
 
     photo = models.ImageField(
-        upload_to='avatars/',
+        upload_to="avatars/",
         blank=True,
-        null=True
+        null=True,
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=["jpg", "jpeg", "png", "webp"]
+            )
+        ]
     )
 
 
@@ -76,6 +85,16 @@ class Profile(models.Model):
                 counter += 1
 
             self.slug = slug
+
+        if self.photo:
+            compressed = compress_image(self.photo)
+
+            if compressed:  # ✅ только если это изображение
+                self.photo.save(self.photo.name, compressed, save=False)
+            else:
+                # ❌ НЕ изображение → удаляем файл
+                self.photo.delete(save=False)
+                self.photo = None
 
         super().save(*args, **kwargs)
 
