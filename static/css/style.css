@@ -1112,3 +1112,16 @@ body.page-leave {
 .edit-profile-btn:hover {
     background-color: #0056b3;
 }
+.wordCounterFixed {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    z-index: 9999;
+}
+

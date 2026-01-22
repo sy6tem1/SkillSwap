@@ -61,11 +61,8 @@ class Profile(models.Model):
         blank=True
     )
 
-
-
-
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.slug and self.name:
             base_slug = slugify(unidecode(self.name))
 
             if not base_slug:
@@ -74,18 +71,13 @@ class Profile(models.Model):
             slug = base_slug
             counter = 1
 
-            while Profile.objects.filter(slug=slug).exists():
+            while Profile.objects.filter(slug=slug).exclude(pk=self.pk).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
 
             self.slug = slug
 
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
-
-
 
 
 class Like(models.Model):

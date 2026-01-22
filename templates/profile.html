@@ -19,7 +19,8 @@
         <div class="profile-avatar-edit">
             <label class="avatar-label">
                 {% if profile.photo %}
-                    <img src="{{ profile.photo.url }}" class="avatar-preview">
+                    <img src="{{ profile.photo.url }}?v={{ profile.updated_at|default:profile.id }}" class="avatar-preview">
+
                 {% else %}
                     <img src="{% static 'assets/images/123.jpg' %}" class="avatar-preview">
                 {% endif %}
@@ -39,10 +40,15 @@
 
         <!-- Описание -->
         <textarea
-            name="description"
-            class="reg-field-input textarea"
-            placeholder="О себе"
-        >{{ profile.description }}</textarea>
+    name="description"
+    id="descriptionField"
+    class="reg-field-input textarea"
+    placeholder="О себе"
+>{{ profile.description }}</textarea>
+
+<div id="wordCounterFixed">
+    <span id="wordCount">0</span> / 20 слов
+</div>
 
         <!-- Telegram -->
         <input
@@ -71,6 +77,8 @@
                 <ul id="skillsDropdown" class="skills-dropdown"></ul>
 
                 <div id="selectedSkills" class="selected-skills"></div>
+
+
 
             </div>
 
@@ -117,6 +125,67 @@ form.addEventListener("submit", () => {
     ];
 </script>
 <script src="{% static 'assets/js/skills_input.js' %}"></script>
+
+
+
+<script>
+const textarea = document.getElementById("descriptionField");
+const wordCountEl = document.getElementById("wordCount");
+const MAX_WORDS = 20;
+
+function getWords(text) {
+    return text
+        .trim()
+        .split(/\s+/)
+        .filter(w => w.length > 0);
+}
+
+function updateTextarea() {
+    // авто-рост
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+
+    let words = getWords(textarea.value);
+
+    if (words.length > MAX_WORDS) {
+        textarea.value = words.slice(0, MAX_WORDS).join(" ");
+        words = words.slice(0, MAX_WORDS);
+    }
+
+    wordCountEl.textContent = words.length;
+}
+
+textarea.addEventListener("input", updateTextarea);
+window.addEventListener("load", updateTextarea);
+
+// ❗ Блокировка отправки формы
+document.querySelector(".profile-edit-form").addEventListener("submit", e => {
+    const words = getWords(textarea.value);
+
+    if (words.length > MAX_WORDS) {
+        e.preventDefault();
+        alert("Описание может содержать не более 20 слов");
+    }
+});
+</script>
+
+
+
+<script>
+const photoInput = document.querySelector('input[name="photo"]');
+const avatarImg = document.querySelector('.avatar-preview');
+
+photoInput.addEventListener('change', () => {
+    const file = photoInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+        avatarImg.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+</script>
 
 
 {% endblock %}

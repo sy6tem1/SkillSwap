@@ -266,40 +266,28 @@ def profile(request):
         profile = None
     return render(request, 'profile.html', {'profile': profile})
 
-from django.shortcuts import render, redirect
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-
-@login_required
-def edit_profile(request):
-    profile = request.user.profile  # если у тебя есть модель Profile
-    if request.method == 'POST':
-        # здесь логика обновления профиля
-        pass
-    return render(request, 'edit_profile.html', {'profile': profile})
-
-
-
-
+from .models import Profile
 
 @login_required
 def profile_edit(request):
     profile = request.user.profile
 
     if request.method == "POST":
-        name = request.POST.get("name", "")
-        telegram = request.POST.get("telegram", "")
-        skills_raw = request.POST.get("skills", "[]")
+        profile.name = request.POST.get("name", "")
+        profile.description = request.POST.get("description", "")
+        profile.telegram = request.POST.get("telegram", "")
 
-        try:
-            skills_ids = json.loads(skills_raw)
-        except json.JSONDecodeError:
-            skills_ids = []
+        if request.FILES.get("photo"):
+            profile.photo = request.FILES["photo"]
 
-        profile.name = name
-        profile.telegram = telegram
-        profile.skills.set(
-            Skill.objects.filter(id__in=skills_ids)
-        )
+
+
         profile.save()
 
         return redirect("profile_edit")
@@ -307,3 +295,4 @@ def profile_edit(request):
     return render(request, "profile.html", {
         "profile": profile,
     })
+
