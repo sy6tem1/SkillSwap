@@ -25,10 +25,15 @@
 
             <div class="user-card__skills">
                 <div class="skills-marquee">
-                    <div class="skills-track">
+                    <div class="skills-track {% if profile.skills.count > 1 %}is-animated{% endif %}">
                         {% for skill in profile.skills.all %}
                             <span class="skill-chip">{{ skill.name }}</span>
                         {% endfor %}
+                        {% if profile.skills.count > 1 %}
+                            {% for skill in profile.skills.all %}
+                                <span class="skill-chip">{{ skill.name }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>

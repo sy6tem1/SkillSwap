@@ -309,11 +309,15 @@ body.page-leave {
 .skills-track {
     display: inline-flex;
     gap: 6px;
-    white-space: nowrap;
     width: max-content;  
 }
 
-@keyframes marquee {
+
+.skills-track.is-animated {
+    animation: scroll-skills 15s linear infinite;
+}
+
+@keyframes scroll-skills {
     from {
         transform: translateX(0);
     }
@@ -327,9 +331,12 @@ body.page-leave {
     padding: 4px 10px;
     border-radius: 14px;
 
-    font-size: 11px;
+    font-size: 12px;
     background: #fff;
-    color: #000;
+    color: #000000;
+
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .skill-tag {
@@ -338,9 +345,16 @@ body.page-leave {
     border: 1px solid var(--gray-text);
     padding: 4px 10px;
     border-radius: 14px;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--black);
     margin: 2px 2px 0 0;
+}
+
+
+@media (max-width: 768px) {
+    .skills-track {
+        animation-duration: 20s;
+    }
 }
 
 /* ---------------------------------------- */
