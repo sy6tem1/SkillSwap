@@ -3,69 +3,6 @@
 
 {% block content %}
 
-<div class="profile-container">
-
-    <!-- Аватарка -->
-    {% if profile.photo %}
-        <img src="{{ profile.photo.url }}" class="profile-avatar">
-    {% else %}
-        <img src="{% static 'img/default-avatar.png' %}" class="profile-avatar">
-    {% endif %}
-
-    <!-- Имя пользователя -->
-     <h2>{{ profile.name }}</h2>
-
-    <!-- Telegram -->
-    {% if profile.telegram %}
-        <p>Telegram: <a href="https://t.me/{{ profile.telegram |cut:"@" }}" target="_blank">@{{ profile.telegram|cut:"@"  }}</a></p>
-    {% else %}
-        <p>Telegram не указан</p>
-    {% endif %}
-
-    <!-- Кнопка редактирования -->
-    <div>
-        <a href="{% url 'edit_profile' %}" class="edit-profile-btn">Редактировать профиль</a>
-    </div>
-
-</div>
-
-<!-- Стили для центрирования аватарки и внешнего вида -->
-<style>
-.profile-container {
-    text-align: center; /* центрируем всё внутри */
-    margin-top: 30px;
-}
-
-.avatar-wrapper {
-    display: flex;
-    justify-content: center; /* горизонтальное центрирование */
-    margin-bottom: 15px;
-}
-
-.profile-avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ccc;
-}
-
-.edit-profile-btn {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.edit-profile-btn:hover {
-    background-color: #0056b3;
-}
-</style>
-
-
 
 <div class="app-header">
     <h2 class="focus-phrase">Мой профиль</h2>

@@ -1077,3 +1077,38 @@ body.page-leave {
     color: black;
     text-decoration: none;
 }
+
+
+
+.profile-container {
+    text-align: center; /* центрируем всё внутри */
+    margin-top: 30px;
+}
+
+.avatar-wrapper {
+    display: flex;
+    justify-content: center; /* горизонтальное центрирование */
+    margin-bottom: 15px;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.edit-profile-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.edit-profile-btn:hover {
+    background-color: #0056b3;
+}

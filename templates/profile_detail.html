@@ -51,7 +51,7 @@
 
     
     {% if request.user.is_authenticated and request.user == profile.user %}
-        <a href="{% url 'profile' %}" class="btn-secondary">
+        <a href="{% url 'profile' %}" class="btn-secondary" style='width: 100%; border-radius: 14px;'>
             Редактировать профиль
         </a>
     {% endif %}
