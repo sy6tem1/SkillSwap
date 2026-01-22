@@ -63,6 +63,20 @@
 
 </div>
 
+<script>
+document.querySelectorAll(".viewed-button").forEach(btn => {
+    btn.addEventListener("click", e => {
+        e.preventDefault();
+
+        const card = btn.closest(".magic-card");
+        card.style.animation = "cardOut 0.3s ease forwards";
+
+        setTimeout(() => {
+            btn.closest("form").submit();
+        }, 280);
+    });
+});
+</script>
 
 
 

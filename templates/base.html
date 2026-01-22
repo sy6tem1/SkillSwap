@@ -15,7 +15,12 @@
 <script src="{% static 'js/likes.js' %}"></script>
 
 
-<body сlass="page">
+
+
+
+<body>
+
+<div id="page-fade"></div>
 
 <div class="content-wrapper">
     <header class="app-header">
@@ -77,23 +82,52 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    document.body.classList.remove("page-leave");
-
-    document.querySelectorAll("a").forEach(link => {
-        if (link.target === "_blank") return;
-        if (link.href.includes("#")) return;
-
-        link.addEventListener("click", e => {
-            e.preventDefault();
-            document.body.classList.add("page-leave");
-
-            setTimeout(() => {
-                window.location = link.href;
-            }, 300);
-        });
-    });
+    const fade = document.getElementById("page-fade");
+    if (fade) {
+        fade.classList.remove("active");
+    }
 });
+
+document.addEventListener("click", e => {
+    const link = e.target.closest("a");
+    if (!link) return;
+
+    if (
+        link.target === "_blank" ||
+        link.hasAttribute("download") ||
+        link.href.startsWith("javascript:")
+    ) {
+        return;
+    }
+
+    e.preventDefault();
+
+    const fade = document.getElementById("page-fade");
+    if (fade) {
+        fade.classList.add("active");
+        setTimeout(() => {
+            window.location.href = link.href;
+        }, 300);
+    } else {
+        window.location.href = link.href;
+    }
+});
+
+document.addEventListener("submit", () => {
+    const fade = document.getElementById("page-fade");
+    if (fade) fade.classList.add("active");
+});
+
+
+
+
 </script>
+
+
+
+
+
+
 
 
 
