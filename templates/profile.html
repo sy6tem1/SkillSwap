@@ -40,15 +40,16 @@
 
         <!-- Описание -->
         <textarea
-    name="description"
-    id="descriptionField"
-    class="reg-field-input textarea"
-    placeholder="О себе"
->{{ profile.description }}</textarea>
+            name="description"
+            id="descriptionField"
+            class="reg-field-input textarea"
+            placeholder="О себе"
+            style='border-radius: 20px;'
+        >{{ profile.description }}</textarea>
 
-<div id="wordCounterFixed">
-    <span id="wordCount">0</span> / 20 слов
-</div>
+        <div id="wordCounterFixed">
+            <span id="wordCount">0</span> / 20 слов
+        </div>
 
         <!-- Telegram -->
         <input
@@ -65,7 +66,7 @@
             <p class="section-title">Навыки</p>
 
             <div class="skills-step">
-
+                
                 <input
                     type="text"
                     id="skillInput"
@@ -73,11 +74,12 @@
                     class="reg-field-input"
                     autocomplete="off"
                 >
-
+                
                 <ul id="skillsDropdown" class="skills-dropdown"></ul>
 
-                <div id="selectedSkills" class="selected-skills"></div>
-
+                <div id="selectedSkills" class="selected-skills" style="margin-top: 10px;">
+                    
+                </div>
 
 
             </div>
@@ -105,69 +107,61 @@
 </div>
 
 
-<script>
-const form = document.querySelector(".profile-edit-form");
 
-form.addEventListener("submit", () => {
-    document.getElementById("skillsField").value =
-        JSON.stringify(selectedSkills);
-});
-</script>
+
+
+
+
+{% comment %} Редактирование навыков {% endcomment %}
 
 
 
 
 <script>
-    const initialSkills = [
+    window.INITIAL_SKILLS = [
         {% for skill in profile.skills.all %}
-            { id: {{ skill.id }}, name: "{{ skill.name }}" },
+            {
+                id: {{ skill.id }},
+                name: "{{ skill.name }}"
+            },
         {% endfor %}
     ];
 </script>
-<script src="{% static 'assets/js/skills_input.js' %}"></script>
 
 
+<script src="{% static 'js/skills_input.js' %}"></script>
 
 <script>
-const textarea = document.getElementById("descriptionField");
-const wordCountEl = document.getElementById("wordCount");
-const MAX_WORDS = 20;
+const form = document.querySelector(".profile-edit-form");
 
-function getWords(text) {
-    return text
+form.addEventListener("submit", e => {
+
+    // ---- skills ----
+    document.getElementById("skillsField").value =
+        JSON.stringify(selectedSkills);
+
+    // ---- description validation ----
+    const textarea = document.getElementById("descriptionField");
+    const words = textarea.value
         .trim()
         .split(/\s+/)
-        .filter(w => w.length > 0);
-}
+        .filter(Boolean);
 
-function updateTextarea() {
-    // авто-рост
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
-
-    let words = getWords(textarea.value);
-
-    if (words.length > MAX_WORDS) {
-        textarea.value = words.slice(0, MAX_WORDS).join(" ");
-        words = words.slice(0, MAX_WORDS);
-    }
-
-    wordCountEl.textContent = words.length;
-}
-
-textarea.addEventListener("input", updateTextarea);
-window.addEventListener("load", updateTextarea);
-
-// ❗ Блокировка отправки формы
-document.querySelector(".profile-edit-form").addEventListener("submit", e => {
-    const words = getWords(textarea.value);
-
-    if (words.length > MAX_WORDS) {
+    if (words.length > 20) {
         e.preventDefault();
         alert("Описание может содержать не более 20 слов");
     }
 });
 </script>
+
+
+
+
+
+{% comment %} Анимации {% endcomment %}
+
+
+ 
 
 
 

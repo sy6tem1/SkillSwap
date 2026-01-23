@@ -1,21 +1,20 @@
 from random import random
-
 from django.contrib.auth.models import User
-from .models import Profile, Skill, Like
+from .models import Profile, Skill, Like, ProfileView
 import json
 from django.contrib.auth import authenticate, login
-
 from django.views.decorators.http import require_POST
-
-from django.contrib.auth import login
 import secrets
 from .decorators import profile_required
-
-
-import random
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import random
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import ProfileForm
 
-from .models import Profile, Skill, ProfileView
+
+
 
 @profile_required
 @login_required
@@ -42,9 +41,7 @@ def magic(request):
         'profile': selected_profile
     })
 
-from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from .models import ProfileView  # твоя модель для просмотров
+
 
 User = get_user_model()
 
@@ -68,11 +65,6 @@ def like_profile(request, profile_id):
     # Добавляем лайк (предполагаем ManyToManyField в Profile: likes = models.ManyToManyField(User, related_name='liked_by'))
     profile.likes.add(request.user)
     return redirect('magic')
-
-
-
-
-from django.http import JsonResponse
 
 
 
@@ -270,19 +262,48 @@ from django.shortcuts import render, get_object_or_404
 
 @login_required
 def profile(request):
-    if hasattr(request.user, 'profile'):
-        profile = request.user.profile
+    profile = request.user.profile
+
+    if request.method == "POST":
+        print("POST:", request.POST)
+        print("FILES:", request.FILES)
+
+        form = ProfileForm(
+            request.POST,
+            request.FILES,
+            instance=profile
+        )
+
+        if form.is_valid():
+            profile = form.save()
+
+            # ===== навыки =====
+            skills_raw = request.POST.get("skills", "[]")
+            skill_ids = json.loads(skills_raw)
+
+            profile.skills.set(
+                Skill.objects.filter(id__in=skill_ids)
+            )
+
+            return redirect("profile")
+
+        else:
+            print("FORM ERRORS:", form.errors)
+
     else:
-        profile = None
-    return render(request, 'profile.html', {'profile': profile})
+        form = ProfileForm(instance=profile)
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "profile": profile,
+            "form": form
+        }
+    )
 
 
 
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Profile
 
 @profile_required
 @login_required
@@ -290,18 +311,43 @@ def profile_edit(request):
     profile = request.user.profile
 
     if request.method == "POST":
-        profile.name = request.POST.get("name", "")
-        profile.description = request.POST.get("description", "")
-        profile.telegram = request.POST.get("telegram", "")
+        print("POST:", request.POST)
+        print("FILES:", request.FILES)
 
-        if request.FILES.get("photo"):
-            profile.photo = request.FILES["photo"]
+        form = ProfileForm(
+            request.POST,
+            request.FILES,
+            instance=profile
+        )
 
-        profile.save()
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.save()
 
-        return redirect("profile_edit")
+            # ===== SKILLS =====
+            skills_raw = request.POST.get("skills", "[]")
 
-    return render(request, "profile.html", {
-        "profile": profile,
-    })
+            try:
+                skills_ids = json.loads(skills_raw)
+            except json.JSONDecodeError:
+                skills_ids = []
 
+            profile.skills.set(
+                Skill.objects.filter(id__in=skills_ids)
+            )
+
+            return redirect("profile")
+
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "form": form,
+            "profile": profile
+        }
+    )
+
+  

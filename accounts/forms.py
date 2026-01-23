@@ -1,7 +1,7 @@
 from django import forms
 from .models import Profile
 
-class ProfileEditForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ("name", "description", "telegram", "photo")
@@ -14,3 +14,4 @@ class ProfileEditForm(forms.ModelForm):
             raise forms.ValidationError("Описание не может превышать 20 слов")
 
         return description
+
