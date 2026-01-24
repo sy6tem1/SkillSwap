@@ -3,13 +3,13 @@
 
 {% block content %}
 <div class="app-header">
-    <h2 class="focus-phrase" id='stepTitle'>Привет!</h2>
+    <h2 class="focus-phrase" id="stepTitle">Привет!</h2>
 </div>
 
 <div class="reg-steps">
     <!-- Шаг 1 -->
     <div class="reg-step active" data-step="1">
-        <div class="reg-field-form-container">
+        <div class="reg-field-form-container" style="top: 150px;">
             <input
                 id="nameInput"
                 name="get-name"
@@ -22,7 +22,7 @@
 
     <!-- Шаг 2 -->
     <div class="reg-step" data-step="2">
-        <div class="avatar-upload reg-field-form-container">
+        <div class="avatar-upload reg-field-form-container" style="top: 180px;">
             <label for="photoInput" class="avatar-placeholder">
                 <img id="photoPreview" src="{% static 'assets/images/123.jpg' %}" alt="avatar">
                 <span>Добавить фото</span>
@@ -33,13 +33,17 @@
 
     <!-- Шаг 3 -->
     <div class="reg-step" data-step="3">
-        <div class="skills-step reg-field-form-container">
-            <input type="text" id="skillInput" placeholder="Начни вводить навык" class="reg-field-input" autocomplete="off">
+        <div class="skills-step reg-field-form-container" style="top: 150px">
+            <input 
+            type="text" 
+            id="skillInput" 
+            placeholder="Начни вводить навык" 
+            class="reg-field-input" 
+            autocomplete="off">
 
+            <ul id="skillsDropdown" class="skills-dropdown" style='background: var(--gray-light); '></ul>
+            <div id="selectedSkills" class="selected-skills"></div>
         </div>
-        <ul id="skillsDropdown" class="skills-dropdown"></ul>
-        <div id="selectedSkills" class="selected-skills"></div>
-        
     </div>
 
     <!-- Шаг 4 -->
@@ -56,8 +60,6 @@
         <button type="button" class="btn-next-text" id="nextBtn">Дальше</button>
     </div>
 </div>
-
-
 
 
 <script>
@@ -77,35 +79,31 @@ function nextStep() {
     const current = document.querySelector(`.reg-step[data-step="${currentStep}"]`);
     const next = document.querySelector(`.reg-step[data-step="${currentStep+1}"]`);
 
-    // Проверка валидности текущего шага
     let valid = true;
-    if(currentStep === 1) valid = validateName();       // Имя
-    if(currentStep === 3) valid = selectedSkills.length > 0; // Навыки
-    if(currentStep === 4) valid = validateTelegram();  // Телеграм
+    if(currentStep === 1) valid = validateName();
+    if(currentStep === 3) valid = selectedSkills.length > 0;
+    if(currentStep === 4) valid = validateTelegram();
 
-    // Если невалидно, остаёмся на текущем шаге
     if(!valid) return;
 
     if(!next){ submitRegistration(); return; }
 
-    // Анимация смены шагов
     current.classList.remove("active");
     current.classList.add("prev");
     next.classList.add("active");
-
     setTimeout(()=>current.classList.remove("prev"), 350);
 
     currentStep++;
     updateUI();
 }
 
-// Обновление заголовка и кнопки
+// Обновление UI
 function updateUI() {
     document.getElementById('stepTitle').textContent = stepsConfig[currentStep].title;
     document.querySelector('.btn-next-text').textContent = stepsConfig[currentStep].button;
 }
 
-// Валидация имени
+// Валидации
 function validateName() {
     const input = document.getElementById('nameInput');
     const value = input.value.trim().toLowerCase();
@@ -121,7 +119,6 @@ function validateName() {
     }
 }
 
-// Валидация Telegram
 function validateTelegram() {
     const input = document.getElementById("telegramInput");
     const value = input.value.trim();
@@ -152,42 +149,78 @@ const dropdown = document.getElementById("skillsDropdown");
 const selectedContainer = document.getElementById("selectedSkills");
 
 skillInput.addEventListener("input", async () => {
-    const value = skillInput.value.trim();
-    if(!value){ dropdown.style.display="none"; return; }
-    const res = await fetch(`/api/skills/?q=${value}`);
-    const skills = await res.json();
+    const query = skillInput.value.trim();
+    if (!query) {
+        dropdown.classList.remove("show");
+        return;
+    }
+
+    const res = await fetch(`/api/skills/?q=${query}`);
+    let skills = await res.json();
+    if (skills.results) skills = skills.results;
+
     dropdown.innerHTML = "";
-    skills.forEach(skill=>{
-        if(selectedSkills.includes(skill.id)) return;
+
+    skills.forEach(skill => {
+        if (selectedSkills.includes(skill.id)) return;
+
         const li = document.createElement("li");
+        li.className = "dropdown-item";
         li.textContent = skill.name;
-        li.onclick = ()=>addSkill(skill);
+
+        li.addEventListener("click", e => {
+            e.stopPropagation();
+            addSkill(skill);
+        });
+
         dropdown.appendChild(li);
     });
-    dropdown.style.display = skills.length?"block":"none";
+
+    if (skills.length) {
+        dropdown.classList.add("show");
+    } else {
+        dropdown.classList.remove("show");
+    }
 });
 
-function addSkill(skill){
+
+
+function addSkill(skill) {
     selectedSkills.push(skill.id);
 
     const chip = document.createElement("div");
+    chip.className = "skill-chip";
 
-    chip.className="skill-chip";
-    chip.textContent=skill.name;
+    const span = document.createElement("span");
+    span.className = "chip-name";
+    span.textContent = skill.name;
 
-    chip.onclick=()=>{
-        selectedSkills = selectedSkills.filter(id=>id!==skill.id);
+    const remove = document.createElement("img");
+    remove.src = "{% static 'assets/icons/Cross.svg' %}";
+    remove.className = "chip-remove";
+
+    remove.addEventListener("click", e => {
+        e.stopPropagation();
         chip.remove();
-    };
+        selectedSkills = selectedSkills.filter(id => id !== skill.id);
+    });
 
-    chip.innerHTML = `
-        <span class="chip-name">${skill.name}</span>
-        <img src="{% static 'assets/icons/Cross.svg' %}" class="skill-chip" alt="remove">`;
-
+    chip.append(span, remove);
     selectedContainer.appendChild(chip);
-    dropdown.style.display="none";
-    skillInput.value="";
+
+    skillInput.value = "";
+    dropdown.innerHTML = "";
+    dropdown.classList.remove("show");
 }
+
+
+
+// Скрытие дропдауна при клике вне
+document.addEventListener("click", e => {
+    if (!skillInput.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove("show");
+    }
+});
 
 // Отправка формы
 function getCookie(name) {
@@ -224,6 +257,4 @@ function submitRegistration(){
     });
 }
 </script>
-
-
 {% endblock %}

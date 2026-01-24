@@ -510,6 +510,8 @@ body {
     border: transparent;
     background: var(--gray-light);
     border-radius: 50px;
+
+    line-height: 40px;
 }
 
 
@@ -571,7 +573,7 @@ body {
 
 .reg-step {
     position: absolute;
-    top: 0;
+    top: 30px;
     left: 0;
     width: 100%;
 
@@ -587,6 +589,8 @@ body {
 
 
 .reg-step.active {
+    margin-top: 30px;
+
     opacity: 1;
     transform: translateX(0);
     pointer-events: auto;
@@ -607,6 +611,8 @@ body {
 
 .avatar-upload{
 
+
+
     border-radius: 20px;
     width: 264px;
     height: 245px;
@@ -620,6 +626,9 @@ body {
 
 
 .avatar-placeholder{
+    margin-top: 120px;
+
+
     width: 264px;
     height: 245px;
 
@@ -677,7 +686,7 @@ body {
 
     position: absolute;
     width: 100%;         
-    z-index: 1000;
+    z-index: 2000;
     
     
     transform: translateY(-6px);
@@ -687,7 +696,7 @@ body {
         opacity 0.2s ease,
         transform 0.2s ease;
 
-    pointer-events: none;
+    pointer-events: auto;
 }
 
 
@@ -698,7 +707,6 @@ body {
     max-height: 240px;      
     opacity: 1;
     transform: translateY(0);
-    pointer-events: auto;
 }
 
 
@@ -713,12 +721,24 @@ body {
 
 }
 
+.dropdown-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+
+
 
 .selected-skills {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 120px; /* небольшое расстояние от инпута */
+    position: relative;
 }
 
 .skill-chip {
