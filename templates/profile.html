@@ -10,7 +10,7 @@
 
 <div class="profile-edit-container">
 
-    <form method="post" enctype="multipart/form-data" class="profile-edit-form">
+    <form method="POST" enctype="multipart/form-data" class="profile-edit-form">
         {% csrf_token %}
 
         <input type="hidden" name="skills" id="skillsField">
@@ -19,46 +19,30 @@
         <div class="profile-avatar-edit">
             <label class="avatar-label">
                 {% if profile.photo %}
-                    <img src="{{ profile.photo.url }}?v={{ profile.updated_at|default:profile.id }}" class="avatar-preview">
-
+                    <img src="{{ profile.photo.url }}" class="avatar-preview">
                 {% else %}
                     <img src="{% static 'assets/images/123.jpg' %}" class="avatar-preview">
                 {% endif %}
                 <span class="avatar-change">Изменить фото</span>
-                <input type="file" name="photo" hidden>
+                {{ form.photo }}
             </label>
         </div>
 
+
         <!-- Имя -->
-        <input
-            type="text"
-            name="name"
-            class="reg-field-input"
-            placeholder="Имя"
-            value="{{ profile.name }}"
-        >
+        {{ form.name }}
+
 
         <!-- Описание -->
-        <textarea
-            name="description"
-            id="descriptionField"
-            class="reg-field-input textarea"
-            placeholder="О себе"
-            style='border-radius: 20px;'
-        >{{ profile.description }}</textarea>
+        {{ form.description }}
 
         <div id="wordCounterFixed">
             <span id="wordCount">0</span> / 20 слов
         </div>
 
         <!-- Telegram -->
-        <input
-            type="text"
-            name="telegram"
-            class="reg-field-input"
-            placeholder="@telegram"
-            value="{{ profile.telegram }}"
-        >
+        {{ form.telegram }}
+
 
         <!-- Навыки -->
         <div class="skills-edit-block">
@@ -102,6 +86,8 @@
             
         </div>
 
+    
+
     </form>
 
 </div>
@@ -134,14 +120,20 @@
 <script>
 const form = document.querySelector(".profile-edit-form");
 
-form.addEventListener("submit", e => {
+form.addEventListener("submit", function (e) {
 
     // ---- skills ----
-    document.getElementById("skillsField").value =
-        JSON.stringify(selectedSkills);
+    if (typeof selectedSkills !== "undefined") {
+        document.getElementById("skillsField").value =
+            JSON.stringify(selectedSkills);
+    } else {
+        document.getElementById("skillsField").value = "[]";
+    }
 
     // ---- description validation ----
     const textarea = document.getElementById("descriptionField");
+    if (!textarea) return;
+
     const words = textarea.value
         .trim()
         .split(/\s+/)

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import profile_detail, login_view, profile_edit
+from .views import profile_detail, login_view
 
 urlpatterns = [
     path('magic/', views.magic, name='magic'),
@@ -13,8 +13,7 @@ urlpatterns = [
     path('likes/', views.likes_list, name='likes_list'),
     path('like/<int:profile_id>/', views.like_profile, name='like_profile'),
     path("likes/toggle/", views.toggle_like, name="toggle_like"),
-    path('profile/', views.profile_edit, name='profile'),
-    path('profile/edit', profile_edit, name='profile_edit'),
+    path('profile/', views.profile, name='profile'),
 ]
 
 

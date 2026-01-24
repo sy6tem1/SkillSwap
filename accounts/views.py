@@ -16,6 +16,7 @@ from .forms import ProfileForm
 
 
 
+
 @profile_required
 @login_required
 def magic(request):
@@ -153,13 +154,6 @@ def like_profile(request, profile_id):
 
 
 
-def profile_detail(request, slug):
-    profile = get_object_or_404(Profile, slug=slug)
-    return render(request, 'profile_detail.html', {
-        'profile': profile
-    })
-
-
 def reg(request):
     if request.method == 'POST':
         profile = Profile.objects.create(
@@ -246,9 +240,12 @@ def login_view(request):
     login(request, user)
     return JsonResponse({"success": True})
 
-from django.shortcuts import render, get_object_or_404
-from .models import Profile
 
+# def profile_detail(request, slug):
+#     profile = get_object_or_404(Profile, slug=slug)
+#     return render(request, 'profile_detail.html', {
+#         'profile': profile
+#     })
 
 @profile_required
 def profile_detail(request, slug):
@@ -257,97 +254,35 @@ def profile_detail(request, slug):
     return render(request, 'profile_detail.html', {
         'profile': profile
     })
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+
 
 @login_required
+@profile_required
 def profile(request):
     profile = request.user.profile
+    print("PROFILE VIEW CALLED, METHOD =", request.method)
 
     if request.method == "POST":
-        print("POST:", request.POST)
-        print("FILES:", request.FILES)
-
-        form = ProfileForm(
-            request.POST,
-            request.FILES,
-            instance=profile
-        )
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
 
         if form.is_valid():
             profile = form.save()
 
-            # ===== навыки =====
             skills_raw = request.POST.get("skills", "[]")
-            skill_ids = json.loads(skills_raw)
-
-            profile.skills.set(
-                Skill.objects.filter(id__in=skill_ids)
-            )
+            skills_ids = json.loads(skills_raw)
+            profile.skills.set(Skill.objects.filter(id__in=skills_ids))
 
             return redirect("profile")
-
-        else:
+        if not form.is_valid():
             print("FORM ERRORS:", form.errors)
 
-    else:
-        form = ProfileForm(instance=profile)
-
-    return render(
-        request,
-        "profile.html",
-        {
-            "profile": profile,
-            "form": form
-        }
-    )
-
-
-
-
-@profile_required
-@login_required
-def profile_edit(request):
-    profile = request.user.profile
-
-    if request.method == "POST":
-        print("POST:", request.POST)
-        print("FILES:", request.FILES)
-
-        form = ProfileForm(
-            request.POST,
-            request.FILES,
-            instance=profile
-        )
-
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.save()
-
-            # ===== SKILLS =====
-            skills_raw = request.POST.get("skills", "[]")
-
-            try:
-                skills_ids = json.loads(skills_raw)
-            except json.JSONDecodeError:
-                skills_ids = []
-
-            profile.skills.set(
-                Skill.objects.filter(id__in=skills_ids)
-            )
-
-            return redirect("profile")
 
     else:
         form = ProfileForm(instance=profile)
 
-    return render(
-        request,
-        "profile.html",
-        {
-            "form": form,
-            "profile": profile
-        }
-    )
+    return render(request, "profile.html", {
+        "profile": profile,
+        "form": form
+    })
 
-  
+
