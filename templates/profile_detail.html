@@ -15,10 +15,10 @@
 
 <div class="profile-detail-container">
  <!-- АВАТАР -->
-    {% if profile.photo %}
+    {% if profile.photo and profile.photo.name %}
         <img src="{{ profile.photo.url }}" class="profile-avatar">
     {% else %}
-        <img src="{% static 'img/default-avatar.png' %}" class="profile-avatar">
+        <img src="{% static 'assets/images/123.jpg' %}" class="profile-avatar">
     {% endif %}
 
     <!-- ИМЯ -->

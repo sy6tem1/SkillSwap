@@ -5,6 +5,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts.models import Profile
+from accounts.views import likes_list
 
 
 
@@ -38,18 +39,16 @@ def home(request):
 
 
 
-def profile(request):
-    return render(request, 'profile.html')
 
 def magic(request):
     return render(request, 'magic.html')
 
-@login_required
-def likes(request):
-    profiles = Profile.objects.filter(received_likes__from_user=request.user)
-    return render(request, 'likes.html', {
-        'profiles': profiles
-    })
+# @login_required
+# def likes(request):
+#     profiles = Profile.objects.filter(received_likes__from_user=request.user)
+#     return render(request, 'likes.html', {
+#         'profiles': profiles
+#     })
 
 def reg(request):
     return render(request, 'registration.html')
@@ -58,7 +57,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('magic/', magic, name='magic'),
-    path('likes/', likes, name='likes'),
     path('reg/', reg, name='reg'),
     path('', include('accounts.urls')),
     path("accounts/", include("accounts.urls")),

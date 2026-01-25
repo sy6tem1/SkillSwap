@@ -49,28 +49,19 @@ User = get_user_model()
 
 @login_required
 def mark_viewed(request, profile_id):
-    # Получаем пользователя, которого просматриваем
-    viewed_user = get_object_or_404(User, id=profile_id)
-
-    # Создаём запись просмотра
-    ProfileView.objects.get_or_create(viewer=request.user, viewed=viewed_user)
-
-    return redirect('magic')
-
-
-
-@login_required
-@profile_required
-def like_profile(request, profile_id):
+    # Ищем профиль по id
     profile = get_object_or_404(Profile, id=profile_id)
-    # Добавляем лайк (предполагаем ManyToManyField в Profile: likes = models.ManyToManyField(User, related_name='liked_by'))
-    profile.likes.add(request.user)
+
+    # Создаём запись просмотра, используя пользователя профиля
+    ProfileView.objects.get_or_create(viewer=request.user, viewed=profile.user)
+
     return redirect('magic')
 
 
 
-@login_required
+
 @profile_required
+@login_required
 @require_POST
 def toggle_like(request):
     if not request.user.is_authenticated:
@@ -105,12 +96,15 @@ def toggle_like(request):
 
 
 
-
-@login_required
 @profile_required
 def likes_list(request):
-    likes = Like.objects.filter(from_user=request.user)
-    return render(request, 'likes.html', {'likes': likes})
+    # Получаем все Like, которые текущий юзер поставил другим профилям
+    likes = Like.objects.filter(from_user=request.user).select_related('to_profile')
+
+    # Извлекаем сами профили
+    profiles = [like.to_profile for like in likes]
+
+    return render(request, 'likes.html', {'profiles': profiles})
 
 
 
@@ -184,6 +178,9 @@ def register_profile(request):
     telegram = request.POST.get("telegram")
     skills_raw = request.POST.get("skills")
     photo = request.FILES.get("photo")
+    
+
+    
 
     if not name or not telegram:
         return JsonResponse({"error": "Не все поля заполнены"}, status=400)
@@ -213,7 +210,9 @@ def register_profile(request):
     if skills_ids:
         profile.skills.set(
             Skill.objects.filter(id__in=skills_ids)
+
         )
+
 
     # Автоматический вход пользователя
     login(request, user)
@@ -241,11 +240,7 @@ def login_view(request):
     return JsonResponse({"success": True})
 
 
-# def profile_detail(request, slug):
-#     profile = get_object_or_404(Profile, slug=slug)
-#     return render(request, 'profile_detail.html', {
-#         'profile': profile
-#     })
+
 
 @profile_required
 def profile_detail(request, slug):
@@ -256,8 +251,8 @@ def profile_detail(request, slug):
     })
 
 
-@login_required
 @profile_required
+@login_required
 def profile(request):
     profile = request.user.profile
     print("PROFILE VIEW CALLED, METHOD =", request.method)

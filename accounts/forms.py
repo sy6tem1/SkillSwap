@@ -1,6 +1,7 @@
 from django import forms
 from .models import Profile
 
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -14,7 +15,7 @@ class ProfileForm(forms.ModelForm):
                 "class": "reg-field-input textarea",
                 "id": "descriptionField",
                 "placeholder": "О себе",
-                "style": "border-radius: 20px;"
+                "style": "border-radius: 20px; line-height: 20px; "
             }),
             "telegram": forms.TextInput(attrs={
                 "class": "reg-field-input",

@@ -19,11 +19,13 @@
         <div class="profile-avatar-edit">
             <label class="avatar-label">
                 {% if profile.photo %}
-                    <img src="{{ profile.photo.url }}" class="avatar-preview">
+                    <img src="{{ profile.photo.url }}" class="avatar-preview">  
                 {% else %}
                     <img src="{% static 'assets/images/123.jpg' %}" class="avatar-preview">
                 {% endif %}
                 <span class="avatar-change">Изменить фото</span>
+                <input type="file" name="photo" accept="image/*" id="id_photo">
+                
                 {{ form.photo }}
             </label>
         </div>
@@ -118,31 +120,26 @@
 <script src="{% static 'js/skills_input.js' %}"></script>
 
 <script>
-const form = document.querySelector(".profile-edit-form");
-
-form.addEventListener("submit", function (e) {
-
-    // ---- skills ----
-    if (typeof selectedSkills !== "undefined") {
-        document.getElementById("skillsField").value =
-            JSON.stringify(selectedSkills);
-    } else {
-        document.getElementById("skillsField").value = "[]";
-    }
-
-    // ---- description validation ----
-    const textarea = document.getElementById("descriptionField");
+document.addEventListener("DOMContentLoaded", () => {
+    const textarea = document.querySelector(
+        'textarea[name="description"]'
+    );
     if (!textarea) return;
 
-    const words = textarea.value
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
+    const minHeight = 40;
 
-    if (words.length > 20) {
-        e.preventDefault();
-        alert("Описание может содержать не более 20 слов");
-    }
+    const autoResize = () => {
+        textarea.style.height = minHeight + "px";
+
+        if (textarea.scrollHeight > minHeight) {
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
+    };
+
+    textarea.addEventListener("input", autoResize);
+
+    // стартовое состояние
+    autoResize();
 });
 </script>
 
@@ -150,10 +147,9 @@ form.addEventListener("submit", function (e) {
 
 
 
+
+
 {% comment %} Анимации {% endcomment %}
-
-
- 
 
 
 
@@ -172,6 +168,36 @@ photoInput.addEventListener('change', () => {
     reader.readAsDataURL(file);
 });
 </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const textarea = document.querySelector('textarea[name="description"]');
+    const wordCountSpan = document.getElementById('wordCount');
+    const maxWords = 20;
+
+    if (!textarea || !wordCountSpan) return;
+
+    const updateWordCount = () => {
+        const text = textarea.value.trim();
+        const words = text === "" ? 0 : text.split(/\s+/).length;
+        wordCountSpan.textContent = words;
+
+        // можно добавить ограничение
+        if (words > maxWords) {
+            wordCountSpan.style.color = "red";
+        } else {
+            wordCountSpan.style.color = "black";
+        }
+    };
+
+    textarea.addEventListener("input", updateWordCount);
+
+    // сразу обновляем счетчик при загрузке
+    updateWordCount();
+});
+</script>
+
 
 
 {% endblock %}

@@ -671,7 +671,7 @@ body {
 
 .skills-dropdown {
     list-style: none;
-    background: #ffffff;
+    background: var(--white);
 
     top: calc(100% + 10px);
     border-radius: 16px;
@@ -1039,6 +1039,45 @@ body {
     padding: 4px 8px;
     border-radius: 12px;
 }
+
+
+/* скрываем ссылку на файл */
+.avatar-label a {
+    display: none;
+}
+
+/* скрываем "Clear" и чекбокс */
+.avatar-label input[type="checkbox"] {
+    display: none;
+}
+
+/* скрываем текст "Clear" */
+.avatar-label label {
+    display: none;
+}
+
+/* скрываем стандартный file input */
+.avatar-label input[type="file"] {
+    display: none;
+}
+
+/* полностью убираем django-тексты "Currently" и "Change" */
+.avatar-label p {
+    display: none;
+}
+
+.avatar-label input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;       /* невидимый */
+    cursor: pointer;  
+    z-index: 99999;       /* поверх картинки */
+}
+
+
 
 /* Inputs */
 
