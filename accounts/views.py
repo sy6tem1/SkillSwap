@@ -12,7 +12,7 @@ from django.http import JsonResponse
 import random
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ProfileForm
-
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -168,7 +168,7 @@ def reg(request):
 
 
 
-
+@csrf_exempt
 @require_POST
 def register_profile(request):
     if request.method != "POST":
