@@ -45,10 +45,17 @@
             </a>
 
             <!-- убрать лайк -->
-            <form method="post" action="{% url 'like_profile' profile.id %}">
+            <form class="like-form" data-profile-id="{{ profile.id }}">
                 {% csrf_token %}
-                <button class="like-btn active">
-                    <img src="{% static 'assets/icons/HeartOn.svg' %}">
+                <button type="s" class="like-btn">
+                    <img
+                        src="{% if profile.id in liked_profile_ids %}
+                            {% static 'assets/icons/HeartOn.svg' %}
+                        {% else %}
+                            {% static 'assets/icons/HeartOff.svg' %}
+                        {% endif %}"
+                        class="like-icon"
+                    >
                 </button>
             </form>
 
