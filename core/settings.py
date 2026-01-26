@@ -40,14 +40,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 
 ]
@@ -126,6 +128,15 @@ CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 
 
+SECURE_SSL_REDIRECT = True
+
+
+
+CSRF_COOKIE_DOMAIN = ".skillswap-never-late.up.railway.app"
+SESSION_COOKIE_DOMAIN = ".skillswap-never-late.up.railway.app"
+
+
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -153,7 +164,12 @@ CSRF_TRUSTED_ORIGINS = [
     "https://skillswap-never-late.up.railway.app",
     "https://skillswap-never-late.com",
     "https://www.skillswap-never-late.com",
+    
 ]
+
+
+CSRF_COOKIE_HTTPONLY = False
+
 
 DEBUG=os.getenv('DEBUG')
 
