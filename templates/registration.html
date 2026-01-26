@@ -62,7 +62,16 @@
 </div>
 
 
-{% csrf_token %}
+<script>
+const CSRF_TOKEN = "{{ csrf_token }}";
+
+
+headers: {
+    "X-CSRFToken": CSRF_TOKEN
+}
+
+
+</script>
 
 
 <script>
