@@ -48,14 +48,7 @@
             <form class="like-form" data-profile-id="{{ profile.id }}">
                 {% csrf_token %}
                 <button type="s" class="like-btn">
-                    <img
-                        src="{% if profile.id in liked_profile_ids %}
-                            {% static 'assets/icons/HeartOn.svg' %}
-                        {% else %}
-                            {% static 'assets/icons/HeartOff.svg' %}
-                        {% endif %}"
-                        class="like-icon"
-                    >
+                    <img src="{% static 'assets/icons/HeartOn.svg' %}" class="like-icon">
                 </button>
             </form>
 
