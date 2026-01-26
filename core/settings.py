@@ -16,9 +16,14 @@ load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "skillswap-never-late.up.railway.app",
+    "skillswap-never-late.com",
+    "www.skillswap-never-late.com",
+]
 
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Application definition
@@ -130,14 +135,23 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+
+
+
 CSRF_TRUSTED_ORIGINS = [
-    "https://7ab3c4927ded.ngrok-free.app",
+    "https://skillswap-never-late.up.railway.app",
+    "https://skillswap-never-late.com",
+    "https://www.skillswap-never-late.com",
 ]
 
 DEBUG=os.getenv('DEBUG')
 
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+
+
+
 
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 дней

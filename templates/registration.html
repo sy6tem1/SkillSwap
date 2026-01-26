@@ -72,7 +72,8 @@ const stepsConfig = {
 
 let currentStep = 1;
 let selectedSkills = [];
-const badWords = ['дурак', 'идиот', 'лох'];
+
+import { containsBadWord } from "badWordsFilter.js";
 
 // Переход между шагами
 function nextStep() {
@@ -107,7 +108,10 @@ function updateUI() {
 function validateName() {
     const input = document.getElementById('nameInput');
     const value = input.value.trim().toLowerCase();
-    if(value.length < 2 || badWords.some(w=>value.includes(w))){
+
+    if(value.length < 2 ||
+        containsBadWord(value)
+    ){
         input.value = "";
         input.placeholder = "Такое сюда ввести не получится";
         input.classList.add("error");
