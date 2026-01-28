@@ -24,7 +24,7 @@
                     <img src="{% static 'assets/images/123.jpg' %}" class="avatar-preview">
                 {% endif %}
                 <span class="avatar-change">Изменить фото</span>
-                <input type="file" name="photo" accept="image/*" id="id_photo">
+                {% comment %} <input type="file" name="photo" accept="image/*" id="id_photo"> {% endcomment %}
                 
                 {{ form.photo }}
             </label>

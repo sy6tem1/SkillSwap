@@ -21,6 +21,11 @@ class ProfileForm(forms.ModelForm):
                 "class": "reg-field-input",
                 "placeholder": "@telegram"
             }),
+            "photo": forms.FileInput(attrs={
+                "id": "id_photo",
+                "accept": "image/*",
+                "style": "display: none;"
+            })
         }
 
     def clean_description(self):
