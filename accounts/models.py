@@ -89,10 +89,9 @@ class Profile(models.Model):
         if self.photo:
             compressed = compress_image(self.photo)
 
-            if compressed:  # ✅ только если это изображение
+            if compressed:  
                 self.photo.save(self.photo.name, compressed, save=False)
             else:
-                # ❌ НЕ изображение → удаляем файл
                 self.photo.delete(save=False)
                 self.photo = None
 
